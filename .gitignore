@@ -1,1 +1,6 @@
 venv
+static
+assets
+*.pyc
+*.pyo
+*.pyd
