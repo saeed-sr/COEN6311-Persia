@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{%static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: 'Nunito', sans-serif;
+        }
+        .dashboard-container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .card-title {
+            font-size: 1.5rem;
+        }
+        .card-text {
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container dashboard-container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome, {{ user.first_name }}!</h5>
+                    <p class="card-text">Your personal dashboard allows you to manage your profile and bookings.</p>
+                    <!-- User Profile Details -->
+                    <p class="card-text"><strong>Username:</strong> {{ user.username }}</p>
+                    <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                    <!-- More user details here -->
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="#" class="btn btn-secondary">View Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{%static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{%static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{%static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+</html>

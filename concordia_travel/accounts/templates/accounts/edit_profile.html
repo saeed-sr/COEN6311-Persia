@@ -1,0 +1,79 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: 'Nunito', sans-serif;
+        }
+        .edit-profile-container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius: 5px;
+            background: #fff;
+        }
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .card-text {
+            font-size: 1rem;
+            color: #555;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container edit-profile-container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Edit Profile</h5>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+</html>
