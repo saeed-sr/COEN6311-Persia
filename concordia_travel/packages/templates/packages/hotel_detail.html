@@ -1,0 +1,21 @@
+{% extends 'packages/base.html' %}
+
+{% block title %}
+Hotel Details
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ hotel.name }} Details</h1>
+    <p><strong>City:</strong> {{ hotel.city }}</p>
+    <p><strong>Phone Number:</strong> {{ hotel.phone_number }}</p>
+    <p><strong>Price per Night:</strong> ${{ hotel.price }}</p>
+    <p>{{ hotel.description }}</p>
+    
+    <!-- Booking Button -->
+    <form action="{% url 'book_hotel' hotel.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success">Book this Hotel</button>
+    </form>
+</div>
+{% endblock %}

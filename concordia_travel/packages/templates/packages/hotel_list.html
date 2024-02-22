@@ -14,6 +14,7 @@ Hotel List
                 <th scope="col">City</th>
                 <th scope="col">Phone Number</th>
                 <th scope="col">Price</th>
+                <th scope="col">Details</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +24,8 @@ Hotel List
                 <td>{{ hotel.city }}</td>
                 <td>{{ hotel.phone_number }}</td>
                 <td>{{ hotel.price }}</td>
+                <td><a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-primary">View</a></td>
+
             </tr>
             {% empty %}
             <tr>

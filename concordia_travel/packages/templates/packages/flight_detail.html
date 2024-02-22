@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'packages/base.html' %}
 
 {% block title %}
 Flight Details
@@ -6,13 +6,18 @@ Flight Details
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Flight Details: {{ flight.flight_number }}</h1>
-    <dl class="row">
-        <dt class="col-sm-3">Airline</dt>
-        <dd class="col-sm-9">{{ flight.airline }}</dd>
-
-        <!-- Add more fields here -->
-    </dl>
-    <!-- Add back link or other navigation -->
+    <h1 class="mb-4">{{ flight.airline }} - Flight {{ flight.flight_number }}</h1>
+    <p><strong>Departure City:</strong> {{ flight.departure_city }}</p>
+    <p><strong>Arrival City:</strong> {{ flight.arrival_city }}</p>
+    <p><strong>Departure Time:</strong> {{ flight.departure_time }}</p>
+    <p><strong>Duration:</strong> {{ flight.duration }}</p>
+    <p><strong>Price:</strong> ${{ flight.price }}</p>
+    <p>{{ flight.description }}</p>
+    
+    <!-- Booking Button -->
+    <form action="{% url 'book_flight' flight.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success">Book this Flight</button>
+    </form>
 </div>
 {% endblock %}
