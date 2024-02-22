@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add/Edit Flight
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ form.instance.pk|yesno:"Edit Flight,Add New Flight" }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>

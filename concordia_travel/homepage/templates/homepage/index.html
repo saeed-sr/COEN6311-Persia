@@ -15,6 +15,39 @@
 <link rel="stylesheet" type="text/css" href="{%static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
 <link rel="stylesheet" type="text/css" href="{%static 'styles/main_styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{%static 'styles/responsive.css' %}">
+
+<style>
+    .listing-buttons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row; /* Align buttons in a row */
+		margin: 2rem 0; /* Space above and below the button container */
+	}
+	
+	.btn-custom {
+		margin: 0.5rem; /* Space around each button */
+		padding: 1rem 2rem; /* Padding inside each button */
+		font-size: 3rem; /* Button font size */
+		color: #ffffff; /* Button text color */
+		border-radius: 30px; /* Round the corners more for a pill-like shape */
+		background-color: #155aa3; /* Button background color */
+		border: none; /* Remove border */
+		text-transform: uppercase; /* Optional: uppercase text */
+		transition: background-color 0.3s; /* Smooth background color transition on hover */
+	}
+	
+	.btn-custom:hover,
+    .btn-custom:focus {
+        background-color: #0d730d; /* Darken button on hover/focus for feedback */
+        color: #ffffff;
+        text-decoration: none; /* Remove underline from links on hover/focus */
+    }
+	
+</style>
+
+
+
 </head>
 <body>
 
@@ -242,6 +275,16 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Navigation Buttons for Listings -->
+	<div class="listing-buttons">
+		<!-- Each button links to the respective listing page -->
+		<a href="../packages/flights" class="btn btn-custom">Flights</a>
+		<a href="../packages/hotels" class="btn btn-custom">Hotels</a>
+		<a href="../packages/activities" class="btn btn-custom">Activities</a>
+	</div>
+
+
 
 	<!-- Destinations -->
 

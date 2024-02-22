@@ -1,0 +1,41 @@
+{% extends 'packages/base.html' %}
+
+{% block title %}
+Flight List
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Flight List</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Flight Number</th>
+                <th scope="col">Airline</th>
+                <th scope="col">Departure City</th>
+                <th scope="col">Arrival City</th>
+                <th scope="col">Departure Time</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight.flight_number }}</td>
+                <td>{{ flight.airline }}</td>
+                <td>{{ flight.departure_city }}</td>
+                <td>{{ flight.arrival_city }}</td>
+                <td>{{ flight.departure_time }}</td>
+                <td>{{ flight.duration }}</td>
+                <td>${{ flight.price }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No flights available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

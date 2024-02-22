@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Packages App{% endblock %}</title>
+    <!-- Include Bootstrap CSS using the static tag -->
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <!-- Optional: Include your custom CSS here -->
+    <!-- <link rel="stylesheet" href="{% static 'css/custom.css' %}"> -->
+</head>
+<body>
+
+    {% block content %}
+    <!-- Your content will go here -->
+    {% endblock %}
+
+    <!-- Include Bootstrap JS, Popper.js, and jQuery using the static tag -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+</html>

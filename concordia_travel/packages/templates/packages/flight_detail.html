@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Flight Details
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Flight Details: {{ flight.flight_number }}</h1>
+    <dl class="row">
+        <dt class="col-sm-3">Airline</dt>
+        <dd class="col-sm-9">{{ flight.airline }}</dd>
+
+        <!-- Add more fields here -->
+    </dl>
+    <!-- Add back link or other navigation -->
+</div>
+{% endblock %}
