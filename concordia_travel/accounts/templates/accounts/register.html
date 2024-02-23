@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
-    <form action="register" method="post">
+    <form action="{% url 'register' %}" method="post">
         {% csrf_token %}
         <h2>Sign Up</h2>
         <div class="input-group">
