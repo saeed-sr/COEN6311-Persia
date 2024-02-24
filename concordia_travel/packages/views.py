@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Flight, Hotel, Activity, CustomPackage
@@ -116,11 +117,21 @@ def create_custom_package(request):
             custom_package = form.save(commit=False)
             custom_package.user = request.user
             custom_package.save()
-            return HttpResponseRedirect(reverse('custom-package-detail', args=[custom_package.pk]))
+
+            # Add success message
+            messages.success(request, 'Your custom package has been added successfully.')
+
+            return redirect('/')  # Change 'home' to the actual URL name of your homepage
+
     else:
         form = CustomPackageForm()
 
     context = {'form': form}
+
+    # Check if there are messages and if it's the first time visiting the page after creating a package
+    if messages.success and request.GET.get('created') == 'true':
+        context['show_success_message'] = True
+
     return render(request, 'packages/create_custom_package.html', context)
 
 class CustomPackageDetailView(DetailView):

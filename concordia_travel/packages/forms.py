@@ -21,3 +21,21 @@ class CustomPackageForm(forms.ModelForm):
     class Meta:
         model = CustomPackage
         fields = ['flights', 'hotels', 'activities']
+
+    flights = forms.ModelMultipleChoiceField(
+        queryset=Flight.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        required=False
+    )
+
+    hotels = forms.ModelMultipleChoiceField(
+        queryset=Hotel.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        required=False
+    )
+
+    activities = forms.ModelMultipleChoiceField(
+        queryset=Activity.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        required=False
+    )

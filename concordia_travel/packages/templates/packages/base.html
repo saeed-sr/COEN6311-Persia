@@ -31,6 +31,16 @@
     {% block content %}
     <!-- Your content will go here -->
     {% endblock %}
+
+    {% if messages %}
+        <div class="messages mt-4">
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <footer class="footer bg-light">

@@ -5,6 +5,12 @@
   <div class="container mt-5">
     <h1 class="mb-4">Create Your Custom Package</h1>
 
+    {% if show_success_message %}
+      <div class="alert alert-success" role="alert">
+        Your custom package has been added successfully.
+      </div>
+    {% endif %}
+
     <!-- Form for creating custom packages -->
     <form method="post" action="{% url 'create_custom_package' %}" class="custom-package-form">
       {% csrf_token %}
