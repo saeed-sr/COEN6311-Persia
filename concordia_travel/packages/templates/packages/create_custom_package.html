@@ -1,0 +1,41 @@
+{% extends 'packages/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-4">Create Your Custom Package</h1>
+
+    <!-- Form for creating custom packages -->
+    <form method="post" action="{% url 'create_custom_package' %}" class="custom-package-form">
+      {% csrf_token %}
+
+      <!-- Use Bootstrap grid to align form fields in a row -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="{{ form.flights.id_for_label }}">Select Flights:</label>
+            {{ form.flights|attr:"class:form-control" }}
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="{{ form.hotels.id_for_label }}">Select Hotels:</label>
+            {{ form.hotels|attr:"class:form-control" }}
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="{{ form.activities.id_for_label }}">Select Activities:</label>
+            {{ form.activities|attr:"class:form-control" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Add any additional fields you want for the custom package -->
+
+      <button type="submit" class="btn btn-primary">Create Package</button>
+    </form>
+  </div>
+{% endblock %}

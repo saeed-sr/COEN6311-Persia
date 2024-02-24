@@ -1,5 +1,5 @@
 from django import forms
-from .models import Flight, Hotel, Activity
+from .models import Flight, Hotel, Activity, CustomPackage
 
 class FlightForm(forms.ModelForm):
     class Meta:
@@ -15,3 +15,9 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = ['name', 'location', 'type', 'start_time', 'duration', 'price']
+
+
+class CustomPackageForm(forms.ModelForm):
+    class Meta:
+        model = CustomPackage
+        fields = ['flights', 'hotels', 'activities']

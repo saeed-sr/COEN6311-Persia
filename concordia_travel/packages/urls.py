@@ -13,5 +13,10 @@ urlpatterns = [
     path('activities/', views.ActivityListView.as_view(), name='activity-list'),
     path('activities/<int:pk>/', views.activity_detail, name='activities_detail'),
     path('activities/book/<int:pk>/', views.book_flight, name='book_activity'),
+
+    path('custom-packages/create/', views.create_custom_package, name='create_custom_package'),
+    path('custom-packages/<int:pk>/', views.CustomPackageDetailView.as_view(), name='custom-package-detail'),
+
+    path('premade_packages/', views.PremadePackageListView.as_view(), name='premade_packages'),
     # Add more URL patterns for detail views, create views, etc.
 ]

@@ -3,8 +3,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Flight, Hotel, Activity
-from .forms import FlightForm, HotelForm, ActivityForm
+from .models import Flight, Hotel, Activity, CustomPackage
+from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -104,3 +106,28 @@ def book_activity(request, pk):
     # For now, let's just redirect to a confirmation page or back to the flight's detail page
     print("BOOKED ACTIVITY", pk)
     return HttpResponseRedirect(reverse('activity_detail', args=[pk]))
+
+
+@login_required
+def create_custom_package(request):
+    if request.method == 'POST':
+        form = CustomPackageForm(request.POST)
+        if form.is_valid():
+            custom_package = form.save(commit=False)
+            custom_package.user = request.user
+            custom_package.save()
+            return HttpResponseRedirect(reverse('custom-package-detail', args=[custom_package.pk]))
+    else:
+        form = CustomPackageForm()
+
+    context = {'form': form}
+    return render(request, 'packages/create_custom_package.html', context)
+
+class CustomPackageDetailView(DetailView):
+    model = CustomPackage
+    template_name = 'packages/custom_package_detail.html'
+    context_object_name = 'custom_package'
+
+
+class PremadePackageListView(ListView):
+    pass
