@@ -48,3 +48,4 @@ class CustomPackage(models.Model):
     flights = models.ManyToManyField(Flight, blank=True)
     hotels = models.ManyToManyField(Hotel, blank=True)
     activities = models.ManyToManyField(Activity, blank=True)
+    is_booked = models.BooleanField(default=False)

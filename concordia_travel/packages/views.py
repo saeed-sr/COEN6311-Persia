@@ -90,23 +90,45 @@ def activity_detail(request, pk):
 
 
 
+@login_required
 def book_flight(request, pk):
-    # Here you would handle booking logic, such as saving to a Booking model
-    # For now, let's just redirect to a confirmation page or back to the flight's detail page
-    print("BOOKED FLIGHT", pk)
-    return HttpResponseRedirect(reverse('flight_detail', args=[pk]))
+    flight = get_object_or_404(Flight, pk=pk)
 
+    # Add the booked flight to the user's custom package
+    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
+    user_custom_package.flights.add(flight)
+
+    # Booking logic (e.g., create a Booking model)
+
+    messages.success(request, 'Flight added to your custom package successfully!')
+    return redirect('flight_detail', pk=pk)
+
+
+@login_required
 def book_hotel(request, pk):
-    # Here you would handle booking logic, such as saving to a Booking model
-    # For now, let's just redirect to a confirmation page or back to the flight's detail page
-    print("BOOKED HOTEL", pk)
-    return HttpResponseRedirect(reverse('hotel_detail', args=[pk]))
+    hotel = get_object_or_404(Hotel, pk=pk)
 
+    # Add the booked flight to the user's custom package
+    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
+    user_custom_package.hotels.add(hotel)
+
+    # Booking logic (e.g., create a Booking model)
+
+    messages.success(request, 'Hotel added to your custom package successfully!')
+    return redirect('hotel_detail', pk=pk)
+
+@login_required
 def book_activity(request, pk):
-    # Here you would handle booking logic, such as saving to a Booking model
-    # For now, let's just redirect to a confirmation page or back to the flight's detail page
-    print("BOOKED ACTIVITY", pk)
-    return HttpResponseRedirect(reverse('activity_detail', args=[pk]))
+    activity = get_object_or_404(Activity, pk=pk)
+
+    # Add the booked flight to the user's custom package
+    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
+    user_custom_package.activities.add(activity)
+
+    # Booking logic (e.g., create a Booking model)
+
+    messages.success(request, 'activity added to your custom package successfully!')
+    return redirect('activity_detail', pk=pk)
 
 
 @login_required
@@ -129,10 +151,11 @@ def create_custom_package(request):
     context = {'form': form}
 
     # Check if there are messages and if it's the first time visiting the page after creating a package
-    if messages.success and request.GET.get('created') == 'true':
+    if messages.success and request.GET.get('created') == 'true' and form.is_valid():
         context['show_success_message'] = True
 
     return render(request, 'packages/create_custom_package.html', context)
+
 
 class CustomPackageDetailView(DetailView):
     model = CustomPackage

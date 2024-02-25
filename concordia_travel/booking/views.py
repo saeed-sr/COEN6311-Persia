@@ -21,3 +21,23 @@ def book_custom_package(request):
     except CustomPackage.DoesNotExist:
         messages.error(request, 'Invalid custom package ID')
         return redirect('error_page')  # Adjust the URL name for an error page
+
+
+@login_required
+def view_bookings(request):
+    # Retrieve current custom packages for the user
+    current_custom_packages = CustomPackage.objects.filter(user=request.user, is_booked=False)
+    
+    # Retrieve old bookings for the user
+    old_bookings = CustomPackage.objects.filter(user=request.user, is_booked=True)
+    
+    context = {
+        'current_custom_packages': current_custom_packages,
+        'old_bookings': old_bookings,
+    }
+    
+    return render(request, 'booking/view_bookings.html', context)
+
+
+def complete_booking(request, custom_package_id):
+    pass 
