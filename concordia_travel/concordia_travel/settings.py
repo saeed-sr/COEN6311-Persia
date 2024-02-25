@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "homepage",
     "accounts",
     "packages",
+    "booking",
 ]
 
 MIDDLEWARE = [
