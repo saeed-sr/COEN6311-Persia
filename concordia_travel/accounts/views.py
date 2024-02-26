@@ -3,6 +3,8 @@ from django.contrib.auth.models import User, auth, Group
 from django.contrib import messages
 from .forms import UserUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+# from django.contrib.auth import update_password
+
 
 
 # Create your views here.
@@ -79,8 +81,21 @@ def edit_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated!')
+            user = form.save()
+
+            # Password change logic
+            if 'password1' in request.POST:  # Check if new password is provided
+                password1 = request.POST['password1']
+                password2 = request.POST['password2']
+                if password1 == password2:
+                    user.set_password(password1)
+                    user.save()
+                    messages.success(request, 'Your profile and password have been updated!')
+                else:
+                    messages.error(request, 'Passwords do not match!')
+            else:
+                # Profile update without password change
+                messages.success(request, 'Your profile has been updated!')
             return redirect('dashboard')
     else:
         form = UserUpdateForm(instance=request.user)
@@ -95,20 +110,3 @@ def edit_profile(request):
 def is_agent(user):
     return user.groups.filter(name='agents').exists()
 
-@login_required
-@user_passes_test(is_agent)
-def add_flight(request):
-    # ... add flight logic for agents
-    pass
-
-@login_required
-@user_passes_test(is_agent)
-def add_hotel(request):
-    # ... add hotel logic for agents
-    pass
-
-@login_required
-@user_passes_test(is_agent)
-def add_activity(request):
-    # ... add activity logic for agents
-    pass
