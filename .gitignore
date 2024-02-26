@@ -1,5 +1,4 @@
 venv
-static
 assets
 *.pyc
 *.pyo
