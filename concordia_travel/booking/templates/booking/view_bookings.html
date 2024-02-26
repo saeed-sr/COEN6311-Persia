@@ -6,24 +6,45 @@
 {% block content %}
 <div class="container">
     <h2>Your Bookings</h2>
+        <h3>Current Custom Packages</h3>
+        {% for custom_package in current_custom_packages %}
+            <p>User: {{ custom_package.user.username }}</p>
+            <p>Flights: 
+                {% if custom_package.flights.exists %}
+                    {% for flight in custom_package.flights.all %}
+                        {{ flight.airline }} - {{ flight.flight_number }}<br>
+                    {% endfor %}
+                {% else %}
+                    No flights
+                {% endif %}
+            </p>
+            <p>Hotels: 
+                {% if custom_package.hotels.exists %}
+                    {% for hotel in custom_package.hotels.all %}
+                        {{ hotel.name }} in {{ hotel.city }}<br>
+                    {% endfor %}
+                {% else %}
+                    No hotels
+                {% endif %}
+            </p>
+            <p>Activities: 
+                {% if custom_package.activities.exists %}
+                    {% for activity in custom_package.activities.all %}
+                        {{ activity.name }} - {{ activity.location }}<br>
+                    {% endfor %}
+                {% else %}
+                    No activities
+                {% endif %}
+            </p>
+            <a href="{% url 'complete_booking' custom_package.id %}">Complete Booking</a>
+        {% endfor %}
 
-    <!-- Display Current Custom Packages -->
-    <h3>Current Custom Packages</h3>
-    {% for custom_package in current_custom_packages %}
-        <!-- Display relevant information about the custom package -->
-        <p>{{ custom_package.name }} - {{ custom_package.description }} - {{ custom_package.price }}</p>
-        <!-- Add buttons or links for further actions -->
-
-        <!-- You can include a link to complete the booking process for this package -->
-        <a href="{% url 'complete_booking' custom_package.id %}">Complete Booking</a>
-    {% endfor %}
-
-    <!-- Display Old Bookings -->
-    <h3>Old Bookings</h3>
-    {% for booking in old_bookings %}
-        <!-- Display relevant information about the old booking -->
-        <p>{{ booking.name }} - {{ booking.description }} - {{ booking.price }}</p>
-        <!-- Add any additional information or actions you want to include -->
-    {% endfor %}
+        <h3>Old Bookings</h3>
+        {% for old_booking in old_bookings %}
+            <!-- Display relevant information about old booking -->
+            <p>User: {{ old_booking.user.username }}</p>
+            <!-- Add more details as needed -->
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
