@@ -1,8 +1,9 @@
 from django.shortcuts import render , redirect
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User, auth, Group
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+
 
 # Create your views here.
 
@@ -28,6 +29,9 @@ def register(request):
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
                 user.save()
+
+                user.groups.add(Group.objects.get(name='normal_users'))
+
                 print('User created')
                 return redirect('login')
         else:
@@ -85,3 +89,26 @@ def edit_profile(request):
         'form': form
     }
     return render(request, 'accounts/edit_profile.html', context)
+
+
+
+def is_agent(user):
+    return user.groups.filter(name='agents').exists()
+
+@login_required
+@user_passes_test(is_agent)
+def add_flight(request):
+    # ... add flight logic for agents
+    pass
+
+@login_required
+@user_passes_test(is_agent)
+def add_hotel(request):
+    # ... add hotel logic for agents
+    pass
+
+@login_required
+@user_passes_test(is_agent)
+def add_activity(request):
+    # ... add activity logic for agents
+    pass

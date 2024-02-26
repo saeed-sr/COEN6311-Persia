@@ -165,3 +165,7 @@ class CustomPackageDetailView(DetailView):
 
 class PremadePackageListView(ListView):
     pass
+
+
+def add_flight(request):
+    pass
