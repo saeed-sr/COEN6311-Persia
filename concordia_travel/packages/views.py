@@ -8,24 +8,66 @@ from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage
 from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
 from django.contrib.auth.decorators import login_required
 
+from django_tables2.views import SingleTableView
+from .tables import FlightTable, HotelTable, ActivityTable
+
+
 
 
 
 # List views
-class FlightListView(ListView):
+class BasePackageListView(SingleTableView, ListView):
+    template_name = None  # Update with your common template for package lists
+    context_object_name = None  # Update with your common context variable name for package lists
+    table_class = None  # Update with your common table class for package lists
+    model = None  # Update with your common model for package lists
+    table_pagination = {"per_page": 10}
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # Get sorting parameters from the request
+        sort = self.request.GET.get('sort', 'id')  # Default to sorting by ID if not specified
+        order = self.request.GET.get('order', 'asc')
+
+        # Apply sorting
+        if order == 'asc':
+            queryset = queryset.order_by(sort)
+        else:
+            queryset = queryset.order_by(f'-{sort}')
+
+        return queryset
+
+class FlightListView(BasePackageListView):
     model = Flight
     template_name = 'packages/flight_list.html'
     context_object_name = 'flights'
+    table_class = FlightTable
 
-class HotelListView(ListView):
+class HotelListView(BasePackageListView):
     model = Hotel
     template_name = 'hotels/hotel_list.html'
     context_object_name = 'hotels'
+    table_class = HotelTable
 
-class ActivityListView(ListView):
+class ActivityListView(BasePackageListView):
     model = Activity
     template_name = 'activities/activity_list.html'
     context_object_name = 'activities'
+    table_class = ActivityTable
+
+def flight_list(request):
+    table = FlightTable(Flight.objects.all())
+    return render(request, 'flight_list.html', {'table': table})
+
+def hotel_list(request):
+    table = HotelTable(Hotel.objects.all())
+    return render(request, 'hotel_list.html', {'table': table})
+
+def activity_list(request):
+    table = ActivityTable(Activity.objects.all())
+    return render(request, 'activity_list.html', {'table': table})
+
 
 # Detail views
 def flight_detail(request, pk):

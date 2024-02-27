@@ -6,33 +6,21 @@ Hotel List
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">hotel List</h1>
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">City</th>
-                <th scope="col">Phone Number</th>
-                <th scope="col">Price</th>
-                <th scope="col">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for hotel in hotels %}
-            <tr>
-                <td>{{ hotel.name }}</td>
-                <td>{{ hotel.city }}</td>
-                <td>{{ hotel.phone_number }}</td>
-                <td>{{ hotel.price }}</td>
-                <td><a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-primary">View</a></td>
-
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7" class="text-center">No hotels available</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h1 class="mb-4">Hotel List</h1>
+    {% load render_table from django_tables2 %}
+    {% render_table table %}
 </div>
+
+<script>
+    // Add JavaScript to make the table headers clickable for sorting
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('th.sorted').forEach(header => {
+            header.addEventListener('click', () => {
+                const order = header.classList.contains('ascending') ? 'desc' : 'asc';
+                const url = "{% url 'hotel-list' %}" + `?sort=${header.dataset.sort}&order=${order}`;
+                window.location.href = url;
+            });
+        });
+    });
+</script>
 {% endblock %}
