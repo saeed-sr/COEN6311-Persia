@@ -40,55 +40,6 @@ def activity_detail(request, pk):
     activity = get_object_or_404(Activity, pk=pk)
     return render(request, 'packages/activity_detail.html', {'activity': activity})
 
-# Create views
-# class FlightCreateView(CreateView):
-#     model = Flight
-#     form_class = FlightForm
-#     template_name = 'flights/flight_form.html'
-
-# class HotelCreateView(CreateView):
-#     model = Hotel
-#     form_class = HotelForm
-#     template_name = 'hotels/hotel_form.html'
-
-# class ActivityCreateView(CreateView):
-#     model = Activity
-#     form_class = ActivityForm
-#     template_name = 'activities/activity_form.html'
-
-# # Update views
-# class FlightUpdateView(UpdateView):
-#     model = Flight
-#     form_class = FlightForm
-#     template_name = 'flights/flight_form.html'
-
-# class HotelUpdateView(UpdateView):
-#     model = Hotel
-#     form_class = HotelForm
-#     template_name = 'hotels/hotel_form.html'
-
-# class ActivityUpdateView(UpdateView):
-#     model = Activity
-#     form_class = ActivityForm
-#     template_name = 'activities/activity_form.html'
-
-# # Delete views
-# class FlightDeleteView(DeleteView):
-#     model = Flight
-#     template_name = 'flights/flight_confirm_delete.html'
-#     success_url = '/flights/'
-
-# class HotelDeleteView(DeleteView):
-#     model = Hotel
-#     template_name = 'hotels/hotel_confirm_delete.html'
-#     success_url = '/hotels/'
-
-# class ActivityDeleteView(DeleteView):
-#     model = Activity
-#     template_name = 'activities/activity_confirm_delete.html'
-#     success_url = '/activities/'
-
-
 
 @login_required
 def book_flight(request, pk):
@@ -168,9 +119,6 @@ class PremadePackageListView(ListView):
     template_name = 'packages/pre_made_package.html'
     context_object_name = 'premade_packages'
 
-    # def get(self, request, *args, **kwargs):
-    #     premade_packages = PreMadePackage.objects.all()
-    #     return render(request, self.template_name, {'premade_packages': premade_packages})
 
 
 def add_flight(request):
