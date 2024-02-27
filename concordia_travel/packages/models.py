@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 class Flight(models.Model):
     flight_number = models.CharField(max_length=10)
@@ -58,3 +58,27 @@ class CustomPackage(models.Model):
         activities_info = "Activities: " + ", ".join(str(activity) for activity in self.activities.all()) if self.activities.exists() else "No activities"
 
         return f"{user_info}\n{flights_info}\n{hotels_info}\n{activities_info}"
+    
+
+class AgentManager(models.Manager):
+    def get_queryset(self):
+        # Only return PreMadePackages created by users in the "agents" group
+        agent_group = Group.objects.get(name='agents')
+        return super().get_queryset().filter(agency__groups=agent_group)
+
+class PreMadePackage(models.Model):
+    agency = models.ForeignKey(User, on_delete=models.CASCADE)
+    flights = models.ManyToManyField(Flight, blank=True)
+    hotels = models.ManyToManyField(Hotel, blank=True)
+    activities = models.ManyToManyField(Activity, blank=True)
+
+    objects = AgentManager()  # Use the custom manager
+
+    def __str__(self):
+        agency_info = f"{self.agency.username}'s Pre Made Package:"
+
+        flights_info = "Flights: " + ", ".join(str(flight) for flight in self.flights.all()) if self.flights.exists() else "No flights"
+        hotels_info = "Hotels: " + ", ".join(str(hotel) for hotel in self.hotels.all()) if self.hotels.exists() else "No hotels"
+        activities_info = "Activities: " + ", ".join(str(activity) for activity in self.activities.all()) if self.activities.exists() else "No activities"
+
+        return f"{agency_info}\n{flights_info}\n{hotels_info}\n{activities_info}"
