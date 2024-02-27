@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Flight, Hotel, Activity, CustomPackage
+from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage
 from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
 from django.contrib.auth.decorators import login_required
 
@@ -164,7 +164,13 @@ class CustomPackageDetailView(DetailView):
 
 
 class PremadePackageListView(ListView):
-    pass
+    model = PreMadePackage
+    template_name = 'packages/pre_made_package.html'
+    context_object_name = 'premade_packages'
+
+    # def get(self, request, *args, **kwargs):
+    #     premade_packages = PreMadePackage.objects.all()
+    #     return render(request, self.template_name, {'premade_packages': premade_packages})
 
 
 def add_flight(request):

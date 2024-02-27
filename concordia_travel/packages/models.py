@@ -82,3 +82,31 @@ class PreMadePackage(models.Model):
         activities_info = "Activities: " + ", ".join(str(activity) for activity in self.activities.all()) if self.activities.exists() else "No activities"
 
         return f"{agency_info}\n{flights_info}\n{hotels_info}\n{activities_info}"
+    
+    @property
+    def name(self):
+        # You can customize how you want to generate the name based on flights, hotels, and activities
+        return f"Package for {self.agency.username}"
+
+    @property
+    def description(self):
+        agency_info = f"Created by {self.agency.username}\n"
+
+        flights_info = "Flights: " + ", ".join(str(flight) for flight in self.flights.all()) + "\n" if self.flights.exists() else ""
+        hotels_info = "Hotels: " + ", ".join(str(hotel) for hotel in self.hotels.all()) + "\n" if self.hotels.exists() else ""
+        activities_info = "Activities: " + ", ".join(str(activity) for activity in self.activities.all()) + "\n" if self.activities.exists() else ""
+
+        package_info = "\n".join(filter(None, [agency_info, flights_info, hotels_info, activities_info]))
+
+        return f"{package_info}"
+
+    @property
+    def calculate_total_price(self):
+        # Calculate total price based on the associated flights, hotels, and activities
+        flights_price = sum(flight.price for flight in self.flights.all())
+        hotels_price = sum(hotel.price for hotel in self.hotels.all())
+        activities_price = sum(activity.price for activity in self.activities.all())
+
+        total_price = flights_price + hotels_price + activities_price
+
+        return total_price

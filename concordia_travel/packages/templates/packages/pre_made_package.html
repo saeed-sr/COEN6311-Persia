@@ -1,0 +1,39 @@
+<!-- premade_packages.html -->
+{% extends 'packages/base.html' %}
+
+{% block title %}Premade Packages - Concordia Travel{% endblock %}
+
+{% block content %}
+  <h2>Premade Packages</h2>
+
+  {% if premade_packages %}
+    <div class="row">
+      {% for package in premade_packages %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ package.agency.username }}'s Pre Made Package</h5>
+              <p class="card-text">
+                {% if package.flights.exists %}
+                  Flights: {{ package.flights.all|join:", " }}<br>
+                {% endif %}
+                {% if package.hotels.exists %}
+                  Hotels: {{ package.hotels.all|join:", " }}<br>
+                {% endif %}
+                {% if package.activities.exists %}
+                  Activities: {{ package.activities.all|join:", " }}<br>
+                {% endif %}
+              </p>
+              <p class="card-text">Price: ${{ package.calculate_total_price }}</p>
+              <p class="card-text">Created by: {{ package.agency.username }}</p>
+              <!-- Add more details about the package as needed -->
+              <a href="#" class="btn btn-primary">Book Now</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No premade packages available at the moment.</p>
+  {% endif %}
+{% endblock %}
