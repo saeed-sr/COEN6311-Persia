@@ -133,6 +133,16 @@ def create_custom_package(request):
             custom_package.user = request.user
             custom_package.save()
 
+            # Get the selected flights, hotels, and activities from the form
+            selected_flights = form.cleaned_data['flights']
+            selected_hotels = form.cleaned_data['hotels']
+            selected_activities = form.cleaned_data['activities']
+
+            # Add selected flights, hotels, and activities to the custom package
+            custom_package.flights.add(*selected_flights)
+            custom_package.hotels.add(*selected_hotels)
+            custom_package.activities.add(*selected_activities)
+
             # Add success message
             messages.success(request, 'Your custom package has been added successfully.')
 
@@ -148,6 +158,7 @@ def create_custom_package(request):
         context['show_success_message'] = True
 
     return render(request, 'packages/create_custom_package.html', context)
+
 
 
 class CustomPackageDetailView(DetailView):
