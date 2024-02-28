@@ -2,7 +2,7 @@ import django_tables2 as tables
 from .models import Flight, Hotel, Activity
 
 class FlightTable(tables.Table):
-    details = tables.LinkColumn('hotel_detail', args=[tables.A('pk')], text='Details', verbose_name='Details', attrs={"class": "btn btn-primary btn-sm"})
+    details = tables.LinkColumn('flight_detail', args=[tables.A('pk')], text='Details', verbose_name='Details', attrs={"class": "btn btn-primary btn-sm"})
 
     class Meta:
         model = Flight
@@ -18,7 +18,7 @@ class HotelTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
 
 class ActivityTable(tables.Table):
-    details = tables.LinkColumn('hotel_detail', args=[tables.A('pk')], text='Details', verbose_name='Details', attrs={"class": "btn btn-primary btn-sm"})
+    details = tables.LinkColumn('activity_detail', args=[tables.A('pk')], text='Details', verbose_name='Details', attrs={"class": "btn btn-primary btn-sm"})
 
     class Meta:
         model = Activity
