@@ -6,6 +6,28 @@ Flight List
 
 {% block content %}
 <div class="container mt-4">
+    <div class="search-form">
+        <form method="get" action="{% url 'flight-list' %}" class="d-flex flex-row align-items-end">
+            <div class="form-field">
+                <label for="departure_city">Departure City</label>
+                <input type="text" id="departure_city" name="departure_city" placeholder="Departure City" value="{{ request.GET.departure_city }}">
+            </div>
+            <div class="form-field">
+                <label for="arrival_city">Arrival City</label>
+                <input type="text" id="arrival_city" name="arrival_city" placeholder="Arrival City" value="{{ request.GET.arrival_city }}">
+            </div>
+            <div class="form-field">
+                <label for="date_from">Date From</label>
+                <input type="date" id="date_from" name="date_from" value="{{ request.GET.date_from }}">
+            </div>
+            <div class="form-field">
+                <label for="date_to">Date To</label>
+                <input type="date" id="date_to" name="date_to" value="{{ request.GET.date_to }}">
+            </div>
+            <button type="submit" class="align-self-end">Search</button>
+        </form>
+    </div>
+
     <h1 class="mb-4">Flight List</h1>
     {% load render_table from django_tables2 %}
     {% render_table table %}

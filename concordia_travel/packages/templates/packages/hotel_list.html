@@ -4,7 +4,23 @@
 Hotel List
 {% endblock %}
 
+
 {% block content %}
+
+<div class="search-form">
+    <form method="get" action="{% url 'hotel-list' %}" class="d-flex flex-row align-items-end">
+        <div class="form-field">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="City" value="{{ request.GET.city }}">
+        </div>
+        <div class="form-field">
+            <label for="hotel_name">Hotel Name</label>
+            <input type="text" id="hotel_name" name="hotel_name" placeholder="Hotel Name" value="{{ request.GET.hotel_name }}">
+        </div>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
 <div class="container mt-4">
     <h1 class="mb-4">Hotel List</h1>
     {% load render_table from django_tables2 %}

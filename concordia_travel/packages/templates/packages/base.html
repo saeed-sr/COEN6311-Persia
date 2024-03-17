@@ -63,6 +63,60 @@
                 margin-top: 10px;
             }
         }
+
+        .search-form {
+            display: flex;
+            flex-wrap: nowrap; /* Prevent wrapping */
+            gap: 10px;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            margin-bottom: 2rem;
+        }
+        .search-form .form-field,
+        .search-form button {
+            flex: 1; /* Each form field and button will take equal width */
+            min-width: 0; /* Prevent overflow */
+        }
+        .search-form label {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .search-form input[type="text"],
+        .search-form input[type="date"],
+        .search-form button {
+            width: 100%; /* Full width of their container */
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .search-form input[type="text"]:focus,
+        .search-form input[type="date"]:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .search-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 992px) {
+            .search-form {
+                flex-wrap: wrap;
+            }
+            .search-form .form-field,
+            .search-form button {
+                flex-basis: 100%; /* Each takes the full width on small screens */
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>

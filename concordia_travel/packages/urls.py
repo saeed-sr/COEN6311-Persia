@@ -12,7 +12,7 @@ urlpatterns = [
     path('hotels/book/<int:pk>/', views.book_flight, name='book_hotel'),
 
     path('activities/', views.ActivityListView.as_view(), name='activity-list'),
-    path('activities/<int:pk>/', views.activity_detail, name='activities_detail'),
+    path('activities/<int:pk>/', views.activity_detail, name='activity_detail'),
     path('activities/book/<int:pk>/', views.book_flight, name='book_activity'),
 
     path('custom-packages/create/', views.create_custom_package, name='create_custom_package'),

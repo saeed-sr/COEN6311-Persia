@@ -3,6 +3,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
+from django.db.models import Q
+from datetime import datetime
+
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage
 from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
@@ -44,17 +47,66 @@ class FlightListView(BasePackageListView):
     context_object_name = 'flights'
     table_class = FlightTable
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # ... existing sorting code ...
+
+        # Search parameters
+        departure_city = self.request.GET.get('departure_city', '')
+        arrival_city = self.request.GET.get('arrival_city', '')
+        date_from = self.request.GET.get('date_from', '')
+        date_to = self.request.GET.get('date_to', '')
+
+        # Filtering based on search parameters
+        if departure_city:
+            queryset = queryset.filter(departure_city__icontains=departure_city)
+        if arrival_city:
+            queryset = queryset.filter(arrival_city__icontains=arrival_city)
+        if date_from and date_to:
+            date_from = datetime.strptime(date_from, '%Y-%m-%d')
+            date_to = datetime.strptime(date_to, '%Y-%m-%d')
+            queryset = queryset.filter(departure_time__range=(date_from, date_to))
+
+        return queryset
+
 class HotelListView(BasePackageListView):
     model = Hotel
     template_name = 'hotels/hotel_list.html'
     context_object_name = 'hotels'
     table_class = HotelTable
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        city = self.request.GET.get('city', '')
+        hotel_name = self.request.GET.get('hotel_name', '')
+
+        if city:
+            queryset = queryset.filter(city__icontains=city)
+        if hotel_name:
+            queryset = queryset.filter(name__icontains=hotel_name)
+
+        return queryset
+
 class ActivityListView(BasePackageListView):
     model = Activity
     template_name = 'activities/activity_list.html'
     context_object_name = 'activities'
     table_class = ActivityTable
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        location = self.request.GET.get('location', '')
+        date_from = self.request.GET.get('date_from', '')
+        date_to = self.request.GET.get('date_to', '')
+
+        if location:
+            queryset = queryset.filter(location__icontains=location)
+        if date_from:
+            queryset = queryset.filter(start_time__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(start_time__lte=date_to)
+
+        return queryset
 
 def flight_list(request):
     table = FlightTable(Flight.objects.all())
