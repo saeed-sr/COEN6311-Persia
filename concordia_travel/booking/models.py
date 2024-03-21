@@ -11,4 +11,4 @@ class Booking(models.Model):
     # Add other fields related to booking
 
     def __str__(self):
-        return f"{self.user.username} - {self.custom_package.title}"
+        return f"{self.user.username}'s booking for package {self.custom_package.id}"

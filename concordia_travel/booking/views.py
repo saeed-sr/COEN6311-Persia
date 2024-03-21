@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from .models import CustomPackage
 from django.utils import timezone
 from datetime import timedelta
+from .models import Booking
+from django.shortcuts import get_object_or_404
 
 @login_required
 @require_POST
@@ -62,8 +64,16 @@ def complete_booking(request, custom_package_id):
         else:
             messages.info(request, 'This booking has already been paid for.')
 
-        return redirect('view_bookings')  # Adjust the URL name as needed
+        return redirect('booking_detail', booking_id=booking.id)  # Adjust the URL name as needed
 
     except CustomPackage.DoesNotExist:
         messages.error(request, 'Invalid custom package ID')
         return redirect('view_bookings')  # Adjust the URL name as needed
+    
+
+@login_required
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
+
+    # Pass the booking to the template
+    return render(request, 'booking/booking_detail.html', {'booking': booking})

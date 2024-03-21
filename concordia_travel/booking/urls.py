@@ -10,5 +10,5 @@ urlpatterns = [
 
     path('complete_booking/<int:custom_package_id>/', views.complete_booking, name='complete_booking'),
 
-    # Add more URL patterns as needed
+    path('booking/detail/<int:booking_id>/', views.booking_detail, name='booking_detail'),
 ]
