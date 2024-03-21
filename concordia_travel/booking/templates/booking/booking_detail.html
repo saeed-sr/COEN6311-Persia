@@ -1,0 +1,43 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Complete Your Booking{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Complete Your Booking</h2>
+    <div class="card mb-3">
+        <div class="card-header bg-warning text-white">Reserved</div>
+        <div class="card-body">
+            <!-- Assuming 'booking' is passed as context to the template -->
+            <h5>User: {{ booking.user.username }}</h5>
+            <p>Flights:
+                {% for flight in booking.custom_package.flights.all %}
+                    {{ flight.airline }} - {{ flight.flight_number }}<br>
+                {% empty %}
+                    No flights
+                {% endfor %}
+            </p>
+            <p>Hotels:
+                {% for hotel in booking.custom_package.hotels.all %}
+                    {{ hotel.name }} in {{ hotel.city }}<br>
+                {% empty %}
+                    No hotels
+                {% endfor %}
+            </p>
+            <p>Activities:
+                {% for activity in booking.custom_package.activities.all %}
+                    {{ activity.name }} - {{ activity.location }}<br>
+                {% empty %}
+                    No activities
+                {% endfor %}
+            </p>
+            <!-- Message to the user -->
+            <div class="alert alert-success" role="alert">
+                Your package has been reserved successfully. You have 1 hour to complete the payment.
+            </div>
+            <!-- Payment button -->
+            <a href="{% url 'payment_process' booking.id %}" class="btn btn-success">Pay Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
