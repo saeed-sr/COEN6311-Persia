@@ -40,6 +40,20 @@
                             {% endif %}
                         </p>
                         <a href="{% url 'complete_booking' custom_package.id %}" class="btn btn-primary">Complete Booking</a>
+                        <!-- Add conditional rendering for the reserved status and the Pay Now button -->
+                            {% with booking=custom_package.booking_set.first %}
+                            {% if booking %}
+                                {% if booking.paid %}
+                                    <p class="reserved-title" style="color:green;">Complete</p>
+                                {% else %}
+                                    <p class="reserved-title" style="color:orange;">Reserved</p>
+                                    <!-- Add the Pay Now button if the booking is within the reservation time -->
+                                    {% if booking.reserved_until >= timezone.now %}
+                                        <a href="{% url 'payment' booking.id %}" class="btn btn-success">Pay Now</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
             {% endfor %}
