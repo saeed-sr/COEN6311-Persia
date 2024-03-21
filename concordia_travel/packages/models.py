@@ -108,5 +108,8 @@ class PreMadePackage(models.Model):
         activities_price = sum(activity.price for activity in self.activities.all())
 
         total_price = flights_price + hotels_price + activities_price
+        print('test')
 
         return total_price
+
+
