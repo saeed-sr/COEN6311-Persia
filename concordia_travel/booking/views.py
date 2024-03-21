@@ -74,6 +74,16 @@ def booking_detail(request, booking_id):
     # Pass the booking to the template
     return render(request, 'booking/booking_detail.html', {'booking': booking})
 
+@login_required
+@require_POST
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(Booking, pk=booking_id, user=request.user, status='none')
+    custom_package = booking.custom_package
+    booking.delete()
+    custom_package.delete()  # Assuming you also want to delete the custom package when the booking is deleted.
+    messages.info(request, 'Booking deleted successfully.')
+    return redirect('view_bookings')
+
 
 @login_required
 def share_your_experience(request): 

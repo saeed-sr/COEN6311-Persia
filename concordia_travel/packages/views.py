@@ -200,6 +200,12 @@ def create_custom_package(request):
             custom_package.hotels.add(*selected_hotels)
             custom_package.activities.add(*selected_activities)
 
+            Booking.objects.create(
+            user=request.user,
+            custom_package=custom_package,
+            status='none'
+    )
+
             # Add success message
             messages.success(request, 'Your custom package has been added successfully.')
 
