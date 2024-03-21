@@ -73,6 +73,7 @@ def complete_booking(request, custom_package_id):
 
 @login_required
 def booking_detail(request, booking_id):
+    print('test')
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
 
     # Pass the booking to the template
