@@ -26,7 +26,6 @@ class Hotel(models.Model):
     def __str__(self):
         return f"{self.name} in {self.city}"
 
-
     # Add more fields as necessary
 
 class Activity(models.Model):

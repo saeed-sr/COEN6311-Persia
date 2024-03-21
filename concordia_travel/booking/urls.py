@@ -11,4 +11,6 @@ urlpatterns = [
     path('complete_booking/<int:custom_package_id>/', views.complete_booking, name='complete_booking'),
 
     path('booking/detail/<int:booking_id>/', views.booking_detail, name='booking_detail'),
+
+    path('share_your_experience/', views.share_your_experience, name='share_your_experience'),
 ]

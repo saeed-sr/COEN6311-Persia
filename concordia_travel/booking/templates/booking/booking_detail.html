@@ -6,9 +6,10 @@
 <div class="container">
     <h2>Complete Your Booking</h2>
     <div class="card mb-3">
-        <div class="card-header bg-warning text-white">Reserved</div>
+        <div class="card-header bg-warning text-white">
+            {{ booking.get_status_display }}
+        </div>
         <div class="card-body">
-            <!-- Assuming 'booking' is passed as context to the template -->
             <h5>User: {{ booking.user.username }}</h5>
             <p>Flights:
                 {% for flight in booking.custom_package.flights.all %}
@@ -31,15 +32,25 @@
                     No activities
                 {% endfor %}
             </p>
-            <!-- Message to the user -->
-            <div class="alert alert-success" role="alert">
-                Your package has been reserved successfully. You have 1 hour to complete the payment.
-            </div>
-            <!-- Payment button -->
-            <a href="{% url 'payment_process' booking.id %}" class="btn btn-success">Pay Now</a>
+            <!-- Message to the user and action button -->
+            {% if booking.status == 'reserved' %}
+                <div class="alert alert-success" role="alert">
+                    Your package has been reserved successfully. You have 1 hour to complete the payment.
+                </div>
+                <a href="{% url 'payment_process' booking.id %}" class="btn btn-success">Pay Now</a>
+            {% elif booking.status == 'none' %}
+                <div class="alert alert-info" role="alert">
+                    This booking has not been reserved. Would you like to complete the booking?
+                </div>
+                <a href="{% url 'complete_booking' booking.custom_package.id %}" class="btn btn-primary">Complete Booking</a>
+            {% elif booking.status == 'paid' %}
+                <div class="alert alert-info" role="alert">
+                    This booking has been paid. Thank you for using our services.
+                </div>
+                <!-- Optionally provide a link to share experience -->
+                <a href="{% url 'share_your_experience' %}" class="btn btn-info">Share Your Experience</a>
+            {% endif %}
         </div>
     </div>
 </div>
-
-
 {% endblock %}

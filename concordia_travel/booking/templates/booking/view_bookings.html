@@ -8,69 +8,92 @@
 <div class="container">
     <h2>Your Bookings</h2>
     <div class="row">
-        <div class="col-md-6"> 
+        <div class="col-md-6">
+
             <h3>Current Custom Packages</h3>
-            {% for custom_package in current_custom_packages %}
+            {% for booking in current_bookings %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        {% with booking=custom_package.booking_set.first %}
-                            {% if booking %}
-                                {% if booking.paid %}
-                                    <p class="reserved-title" style="color:green;">Complete</p>
-                                {% else %}
-                                    <p class="reserved-title" style="color:orange;">Reserved</p>
-                                    <!-- Add the Pay Now button if the booking is within the reservation time -->
-                                    {% if booking.reserved_until >= timezone.now %}
-                                        <a href="{% url 'payment' booking.id %}" class="btn btn-success">Pay Now</a>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        {% endwith %}
-
-                        <p>User: {{ custom_package.user.username }}</p>
-                        <p>Flights: 
-                            {% if custom_package.flights.exists %}
-                                {% for flight in custom_package.flights.all %}
-                                    {{ flight.airline }} - {{ flight.flight_number }}<br>
-                                {% endfor %}
-                            {% else %}
+                        {% if booking.status == 'reserved' %}
+                            <div class="card-header bg-warning text-white">Reserved</div>
+                        {% endif %}
+                        
+                        <p>User: {{ booking.user.username }}</p>
+                        <p>Flights:
+                            {% for flight in booking.custom_package.flights.all %}
+                                {{ flight.airline }} - {{ flight.flight_number }}<br>
+                            {% empty %}
                                 No flights
-                            {% endif %}
+                            {% endfor %}
                         </p>
-                        <p>Hotels: 
-                            {% if custom_package.hotels.exists %}
-                                {% for hotel in custom_package.hotels.all %}
-                                    {{ hotel.name }} in {{ hotel.city }}<br>
-                                {% endfor %}
-                            {% else %}
+                        <p>Hotels:
+                            {% for hotel in booking.custom_package.hotels.all %}
+                                {{ hotel.name }} in {{ hotel.city }}<br>
+                            {% empty %}
                                 No hotels
-                            {% endif %}
+                            {% endfor %}
                         </p>
-                        <p>Activities: 
-                            {% if custom_package.activities.exists %}
-                                {% for activity in custom_package.activities.all %}
-                                    {{ activity.name }} - {{ activity.location }}<br>
-                                {% endfor %}
-                            {% else %}
+                        <p>Activities:
+                            {% for activity in booking.custom_package.activities.all %}
+                                {{ activity.name }} - {{ activity.location }}<br>
+                            {% empty %}
                                 No activities
-                            {% endif %}
+                            {% endfor %}
                         </p>
-                        <a href="{% url 'complete_booking' custom_package.id %}" class="btn btn-primary">Complete Booking</a>
-                        <!-- Add conditional rendering for the reserved status and the Pay Now button -->
-                            
+        
+                        {% if booking.status == 'reserved' %}
+                            <!-- Moved the "Pay Now" button to the bottom -->
+                            <a href="{% url 'payment_process' booking.id %}" class="btn btn-success">Pay Now</a>
+
+                        {% elif booking.status == 'none' %}
+                            <!-- This form will submit a POST request to the 'complete_booking' view -->
+                            <form method="post" action="{% url 'complete_booking' booking.custom_package.id %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Complete Booking" class="btn btn-primary">
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
+            {% empty %}
+                <p>No current custom packages.</p>
             {% endfor %}
         </div>
+        
 
         <div class="col-md-6">
             <h3>Old Bookings</h3>
-            {% for old_booking in old_bookings %}
+            {% for booking in old_bookings %}
                 <div class="card mb-3">
-                    <div class="card-body">
-                        <!-- Display old bookings -->
+                    <div class="card-header bg-success text-white">Completed</div>
+                        <div class="card-body">
+                            <p>User: {{ booking.user.username }}</p>
+                            <p>Flights:
+                                {% for flight in booking.custom_package.flights.all %}
+                                    {{ flight.airline }} - {{ flight.flight_number }}<br>
+                                {% empty %}
+                                    No flights
+                                {% endfor %}
+                            </p>
+                            <p>Hotels:
+                                {% for hotel in booking.custom_package.hotels.all %}
+                                    {{ hotel.name }} in {{ hotel.city }}<br>
+                                {% empty %}
+                                    No hotels
+                                {% endfor %}
+                            </p>
+                            <p>Activities:
+                                {% for activity in booking.custom_package.activities.all %}
+                                    {{ activity.name }} - {{ activity.location }}<br>
+                                {% empty %}
+                                    No activities
+                                {% endfor %}
+                            </p>
+                            <a href="{% url 'share_your_experience' %}" class="btn btn-info">Share Your Experience</a>
+                        </div>
                     </div>
                 </div>
+            {% empty %}
+                <p>No old bookings.</p>
             {% endfor %}
         </div>
     </div>

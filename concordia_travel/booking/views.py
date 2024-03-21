@@ -28,53 +28,53 @@ def book_custom_package(request):
 
 
 @login_required
-def view_bookings(request):
-    # Retrieve current custom packages for the user
-    current_custom_packages = CustomPackage.objects.filter(user=request.user, is_booked=False)
-    
-    # Retrieve old bookings for the user
-    old_bookings = CustomPackage.objects.filter(user=request.user, is_booked=True)
-    
-    context = {
-        'current_custom_packages': current_custom_packages,
-        'old_bookings': old_bookings,
-    }
-    
-    return render(request, 'booking/view_bookings.html', context)
-
-
-@login_required
 def complete_booking(request, custom_package_id):
-    try:
-        custom_package = CustomPackage.objects.get(pk=custom_package_id, user=request.user)
-
-        # Create a booking if it doesn't exist
+    # Ensure this is only accessed via POST
+    if request.method == 'POST':
+        custom_package = get_object_or_404(CustomPackage, pk=custom_package_id, user=request.user)
         booking, created = Booking.objects.get_or_create(
             user=request.user,
             custom_package=custom_package,
-            defaults={'paid': False}  # Initial value for paid is False
+            defaults={'status': 'reserved', 'reserved_until': timezone.now() + timedelta(hours=1)}
         )
 
-        # Check if the booking is not already completed
-        if not booking.paid:
-            # Set a timestamp for when the reservation is made
-            booking.reserved_until = timezone.now() + timedelta(hours=1)
-            booking.save()
-            messages.success(request, 'Your package has been reserved successfully. You have 1 hour to complete the payment.')
-        else:
-            messages.info(request, 'This booking has already been paid for.')
+        # You might need to update the booking status here based on your logic
+        # For now, assuming the booking gets 'reserved' status immediately
+        booking.status = 'reserved'
+        booking.save()
 
-        return redirect('booking_detail', booking_id=booking.id)  # Adjust the URL name as needed
+        messages.success(request, 'Booking is now reserved. Please complete the payment.')
+        return redirect('booking_detail', booking_id=booking.id)
+    else:
+        return redirect('view_bookings')
 
-    except CustomPackage.DoesNotExist:
-        messages.error(request, 'Invalid custom package ID')
-        return redirect('view_bookings')  # Adjust the URL name as needed
+@login_required
+def view_bookings(request):
+    # Retrieve bookings for the user that are not paid yet or are reserved
+    current_bookings = Booking.objects.filter(
+        user=request.user, 
+        status__in=['none', 'reserved']
+    ).exclude(
+        reserved_until__lt=timezone.now()
+    )
+    old_bookings = Booking.objects.filter(user=request.user, status='paid')
     
+    context = {
+        'current_bookings': current_bookings,
+        'old_bookings': old_bookings,
+    }
+    print('test2')
+    return render(request, 'booking/view_bookings.html', context)
 
 @login_required
 def booking_detail(request, booking_id):
-    print('test')
+    print('test3')
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
 
     # Pass the booking to the template
     return render(request, 'booking/booking_detail.html', {'booking': booking})
+
+
+@login_required
+def share_your_experience(request): 
+    pass

@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 from django_tables2.views import SingleTableView
 from .tables import FlightTable, HotelTable, ActivityTable
+from booking.models import Booking
 
 
 
@@ -138,42 +139,46 @@ def activity_detail(request, pk):
 @login_required
 def book_flight(request, pk):
     flight = get_object_or_404(Flight, pk=pk)
-
-    # Add the booked flight to the user's custom package
-    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
-    user_custom_package.flights.add(flight)
-
-    # Booking logic (e.g., create a Booking model)
-
-    messages.success(request, 'Flight added to your custom package successfully!')
+    custom_package = CustomPackage.objects.create(user=request.user)
+    custom_package.flights.add(flight)
+    Booking.objects.create(
+        user=request.user,
+        custom_package=custom_package,
+        status='none'
+    )
+    messages.success(request, 'Flight booked successfully!')
     return redirect('flight_detail', pk=pk)
 
 
 @login_required
 def book_hotel(request, pk):
     hotel = get_object_or_404(Hotel, pk=pk)
-
-    # Add the booked flight to the user's custom package
-    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
-    user_custom_package.hotels.add(hotel)
-
-    # Booking logic (e.g., create a Booking model)
-
-    messages.success(request, 'Hotel added to your custom package successfully!')
+    custom_package = CustomPackage.objects.create(user=request.user)
+    custom_package.hotels.add(hotel)
+    Booking.objects.create(
+        user=request.user,
+        custom_package=custom_package,
+        status='none'
+    )
+    messages.success(request, 'Hotel booked successfully!')
     return redirect('hotel_detail', pk=pk)
+
+
 
 @login_required
 def book_activity(request, pk):
     activity = get_object_or_404(Activity, pk=pk)
-
-    # Add the booked flight to the user's custom package
-    user_custom_package, created = CustomPackage.objects.get_or_create(user=request.user)
-    user_custom_package.activities.add(activity)
-
-    # Booking logic (e.g., create a Booking model)
-
-    messages.success(request, 'activity added to your custom package successfully!')
+    custom_package = CustomPackage.objects.create(user=request.user)
+    custom_package.activities.add(activity)
+    Booking.objects.create(
+        user=request.user,
+        custom_package=custom_package,
+        status='none'
+    )
+    messages.success(request, 'Activity booked successfully!')
     return redirect('activity_detail', pk=pk)
+
+
 
 
 @login_required
