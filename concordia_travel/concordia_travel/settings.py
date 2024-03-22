@@ -133,3 +133,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+
+STRIPE_PUBLIC_KEY = 'pk_live_51OxFsXRuihmsOiSauDYOCnYl5QX2BJb1wlA1dDQHBqt6QXmzZaJbOzn6WM6mkkQmQ0UPkOopyDxA3jUGyfHG2JAd00WDs078fR'
+STRIPE_SECRET_KEY = 'wkjn-yzza-sxpp-wusd-jkfd'
+
+
