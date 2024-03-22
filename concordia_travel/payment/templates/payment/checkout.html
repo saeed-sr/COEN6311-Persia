@@ -1,0 +1,92 @@
+{% extends 'payment/base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block extra_head %}
+<!-- Any additional scripts for Stripe or styling for the checkout page -->
+<style>
+  #payment-form {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+  }
+  #card-element, #submit-button {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    width: calc(100% - 22px); /* Adjust width to account for padding and border */
+    border-radius: 4px;
+  }
+  #submit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  #submit-button:hover {
+    background-color: #218838;
+  }
+  #card-errors {
+    color: #dc3545;
+    margin-top: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Checkout</h2>
+    <form id="payment-form" class="my-4">
+        <div id="card-element">
+            <!-- Elements will create input elements here -->
+        </div>
+        <!-- We'll put the error messages in this element -->
+        <div id="card-errors" role="alert"></div>
+        <button id="submit-button" class="btn btn-success mt-3">Pay Now</button>
+    </form>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script>
+    var stripe = Stripe('your-publishable-key');
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        stripe.createPaymentMethod('card', cardElement, {
+            billing_details: { name: 'Jenny Rosen' }
+        }).then(function(result) {
+            if (result.error) {
+                // Show error in #card-errors
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server
+                stripeTokenHandler(result.paymentMethod.id);
+            }
+        });
+    });
+
+    function stripeTokenHandler(paymentMethodId) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'paymentMethodId');
+        hiddenInput.setAttribute('value', paymentMethodId);
+        form.appendChild(hiddenInput);
+
+        // Submit the form
+        form.submit();
+    }
+</script>
+{% endblock %}
