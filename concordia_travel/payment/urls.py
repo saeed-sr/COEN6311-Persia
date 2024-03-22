@@ -6,5 +6,5 @@ urlpatterns = [
     path('<int:booking_id>/', views.payment, name='payment_process'),
 
     path('checkout/<int:booking_id>/', views.checkout, name='checkout'),
-    path('payment_success/', views.payment_success, name='payment_success'),
+    path('payment_success/<int:booking_id>/', views.payment_success, name='payment_success'),
 ]

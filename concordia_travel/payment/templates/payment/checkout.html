@@ -3,52 +3,102 @@
 {% block title %}Checkout{% endblock %}
 
 {% block extra_head %}
-<!-- Any additional scripts for Stripe or styling for the checkout page -->
 <style>
-  #payment-form {
-    width: 100%;
-    max-width: 500px;
-    margin: auto;
+  .checkout-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 2rem;
   }
-  #card-element, #submit-button {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
-    width: calc(100% - 22px); /* Adjust width to account for padding and border */
+  .package-summary {
+    width: 40%;
+    margin-right: 2%;
+    background: #f6f9fc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+  }
+  .payment-form-container {
+    width: 40%;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+  }
+  .payment-form-container form {
+    display: grid;
+    grid-gap: 1rem;
+  }
+  .stripe-button-el {
+    display: none;
+  }
+  .stripe-style {
+    background: #556cd6;
+    color: #ffffff;
+    border: 0;
+    padding: 16px 32px;
+    text-transform: uppercase;
     border-radius: 4px;
-  }
-  #submit-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
+    transition: background-color .3s;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s;
   }
-  #submit-button:hover {
-    background-color: #218838;
-  }
-  #card-errors {
-    color: #dc3545;
-    margin-top: 10px;
+  .stripe-style:hover {
+    background: #43458b;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h2>Checkout</h2>
-    <form id="payment-form" class="my-4">
-        <div id="card-element">
-            <!-- Elements will create input elements here -->
+<div class="checkout-wrapper">
+    <div class="package-summary">
+        <h3>Order Summary</h3>
+        <!-- Assume 'booking' is the context variable containing the booking details -->
+        <div>
+          <h4>Flights:</h4>
+          {% for flight in booking.custom_package.flights.all %}
+            <p>{{ flight.airline }} - {{ flight.flight_number }}: ${{ flight.price }}</p>
+          {% empty %}
+            <p>No flights</p>
+          {% endfor %}
         </div>
-        <!-- We'll put the error messages in this element -->
-        <div id="card-errors" role="alert"></div>
-        <button id="submit-button" class="btn btn-success mt-3">Pay Now</button>
+        <div>
+          <h4>Hotels:</h4>
+          {% for hotel in booking.custom_package.hotels.all %}
+            <p>{{ hotel.name }} in {{ hotel.city }}: ${{ hotel.price }}</p>
+          {% empty %}
+            <p>No hotels</p>
+          {% endfor %}
+        </div>
+        <div>
+          <h4>Activities:</h4>
+          {% for activity in booking.custom_package.activities.all %}
+            <p>{{ activity.name }} - {{ activity.location }}: ${{ activity.price }}</p>
+          {% empty %}
+            <p>No activities</p>
+          {% endfor %}
+        </div>
+        <!-- Subtotal, taxes, and total -->
+        <div>
+          <!-- <p>Subtotal: ${{ booking.custom_package.get_total_price }}</p> -->
+          <!-- Assume taxes are calculated as a separate method/property -->
+          <!-- <p>Taxes: ${{ booking.custom_package.get_taxes }}</p> -->
+          <p><strong>Total: ${{ booking.custom_package.get_total_price }}</strong></p>
+        </div>
+    </div>
+      
+  
+  <div class="payment-form-container">
+    <form action="{% url 'checkout' booking_id=booking.id %}" method="post" id="payment-form">
+      {% csrf_token %}
+      <div id="card-element">
+        <!-- Stripe Elements will go here -->
+      </div>
+      <div id="card-errors" role="alert"></div>
+      <button class="stripe-style">Pay ${{ booking.custom_package.get_total_price }}</button>
     </form>
+  </div>
 </div>
 {% endblock %}
-
 
 {% block extra_scripts %}
 <script>

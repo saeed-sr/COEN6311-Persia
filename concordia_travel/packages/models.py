@@ -58,6 +58,13 @@ class CustomPackage(models.Model):
 
         return f"{user_info}\n{flights_info}\n{hotels_info}\n{activities_info}"
     
+    def get_total_price(self):
+        total_price = 0
+        total_price += sum(flight.price for flight in self.flights.all())
+        total_price += sum(hotel.price for hotel in self.hotels.all())
+        total_price += sum(activity.price for activity in self.activities.all())
+        return total_price
+    
 
 class AgentManager(models.Manager):
     def get_queryset(self):
