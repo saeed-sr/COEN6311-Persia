@@ -15,7 +15,10 @@ from django_tables2.views import SingleTableView
 from .tables import FlightTable, HotelTable, ActivityTable
 from booking.models import Booking
 
-
+from .forms import CommentFlightForm
+from .models import CommentFlight
+from .forms import CommentHotelForm
+from .models import CommentHotel
 
 
 
@@ -123,17 +126,63 @@ def activity_list(request):
 
 
 # Detail views
+
 def flight_detail(request, pk):
     flight = get_object_or_404(Flight, pk=pk)
-    return render(request, 'packages/flight_detail.html', {'flight': flight})
+    comments = flight.comments.all()
+
+    if request.method == 'POST':
+        form = CommentFlightForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.flight = flight
+            comment.save()
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentFlightForm()
+
+    return render(request, 'packages/flight_detail.html', {'flight': flight, 'comments': comments, 'comment_form': form})
 
 def hotel_detail(request, pk):
     hotel = get_object_or_404(Hotel, pk=pk)
-    return render(request, 'packages/hotel_detail.html', {'hotel': hotel})
+    comments = hotel.comments.all()
+
+    if request.method == 'POST':
+        form = CommentHotelForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.hotel = hotel
+            comment.save()
+            messages.success(request, 'Your comment has been added successfully.')
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentHotelForm()
+
+    return render(request, 'packages/hotel_detail.html', {'hotel': hotel, 'comments': comments, 'comment_form': form})
+
+
+# views.py
+from .forms import CommentActivityForm
+from .models import CommentActivity
 
 def activity_detail(request, pk):
     activity = get_object_or_404(Activity, pk=pk)
-    return render(request, 'packages/activity_detail.html', {'activity': activity})
+    comments = activity.comments.all()
+
+    if request.method == 'POST':
+        form = CommentActivityForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.activity = activity
+            comment.save()
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentActivityForm()
+
+    return render(request, 'packages/activity_detail.html', {'activity': activity, 'comments': comments, 'comment_form': form})
 
 
 @login_required

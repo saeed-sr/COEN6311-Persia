@@ -19,5 +19,33 @@ Flight Details
       {% csrf_token %}
       <button type="submit" class="btn btn-success">Book this Flight</button>
     </form>
+
+    <!-- Comments Section -->
+    <div class="mt-4">
+        <h2>Comments</h2>
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>{{ comment.user.username }}</strong> - {{ comment.created_at|date:"F d, Y" }}<br>
+                    {{ comment.text }}
+                </li>
+            {% empty %}
+                <li>No comments yet.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Comment Form -->
+        {% if user.is_authenticated %}
+        <h2>Add a Comment</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% else %}
+        <p class="mt-4">Please <a href="{% url 'login' %}">login</a> to add a comment.</p>
+    {% endif %}
+    </div>
 </div>
 {% endblock %}
+
