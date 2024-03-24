@@ -66,6 +66,28 @@
         .delete-button:hover {
             background-color: #c82333; /* Darker red on hover */
         }
+        .update-button {
+            background-color: green; /* green background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .update-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Style for the question input field */
+        .question-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -93,27 +115,29 @@
                     <div class="card {% if question.answered %}answered{% else %}unanswered{% endif %}">
                         <div class="card-body">
                             <h5 class="card-title">Question:</h5>
-                            <p class="card-text">{{ question.question_text }}</p>
-                            <!-- Displaying additional question details -->
+                            <!-- Displaying the question -->
+                            <div style="margin-left: 10%;">
+                                <div id="question-{{ question.id }}-display" style="border: 1px solid #ccc; padding: 10px;">
+                                    <p class="card-text">{{ question.question_text }}</p>
+                                </div>
+                            </div>
                             <p class="card-text"><strong>Date Asked:</strong> {{ question.created_at }}</p>
                             <p class="card-text"><strong>Agency Username:</strong> {{ question.pre_made_package.agency.username }}</p>
                             <!-- If flights, hotels, and activities are ManyToMany fields, you may need to loop through them -->
                             <p class="card-text"><strong>Flight Number:</strong> {{ question.pre_made_package.flights.first.flight_number }}</p>
                             <p class="card-text"><strong>Hotel Name:</strong> {{ question.pre_made_package.hotels.first.name }}</p>
                             <p class="card-text"><strong>Activity Name:</strong> {{ question.pre_made_package.activities.first.name }}</p>
-                            <!-- Answer box -->
-                            {% if question.answered %}
-                                <div class="answer-box">
-                                    <h5 class="card-title">Answer:</h5>
-                                    <p class="card-text answer-text">{{ question.answer_text }}</p>
-                                </div>
-                            {% else %}
-                                <div class="answer-box">
-                                    <h5 class="card-title">Answer:</h5>
-                                    <p class="card-text answer-text">the agent has not answered your question yet.</p>
-                                </div>
-                            {% endif %}
-                            
+                            <!-- Update form (hidden by default) -->
+                            <form id="update-form-{{ question.id }}" action="{% url 'update_question' question.id %}" method="post" style="display: none;">
+                                {% csrf_token %}
+                                <input type="text" name="updated_question_text" id="updated-question-text-{{ question.id }}" class="question-input" value="{{ question.question_text }}">
+                                <button type="submit" class="btn btn-success mt-2">Update</button>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="cancelUpdate({{ question.id }})">Cancel</button>
+                            </form>
+
+                            <!-- Update button -->
+                            <button class="update-button" onclick="editQuestion({{ question.id }})">Update</button>
+
                             <!-- Delete button -->
                             <form id="delete-form-{{ question.id }}" action="{% url 'delete_question' question.id %}" method="post">
                                 {% csrf_token %}
@@ -139,6 +163,18 @@
         if (confirmation) {
             document.getElementById("delete-form-" + questionId).submit();
         }
+    }
+
+    function editQuestion(questionId) {
+        // Hide the question display and show the update form
+        document.getElementById("question-" + questionId + "-display").style.display = "none";
+        document.getElementById("update-form-" + questionId).style.display = "block";
+    }
+
+    function cancelUpdate(questionId) {
+        // Show the question display and hide the update form
+        document.getElementById("question-" + questionId + "-display").style.display = "block";
+        document.getElementById("update-form-" + questionId).style.display = "none";
     }
 </script>
 </body>

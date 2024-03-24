@@ -80,6 +80,17 @@ def user_dashboard(request):
     return render(request, 'accounts/dashboard.html', {'user_questions': user_questions})
 
 @login_required
+def update_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == 'POST':
+        updated_question_text = request.POST.get('updated_question_text')
+        question.question_text = updated_question_text
+        question.save()
+        return redirect('dashboard')  # Redirect to the dashboard after updating the question
+    else:
+        return redirect('dashboard')  # Redirect to the dashboard if the request method is not POST
+
+@login_required
 def delete_question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     if request.method == 'POST':
