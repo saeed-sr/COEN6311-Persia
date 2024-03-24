@@ -127,6 +127,18 @@
                             <p class="card-text"><strong>Flight Number:</strong> {{ question.pre_made_package.flights.first.flight_number }}</p>
                             <p class="card-text"><strong>Hotel Name:</strong> {{ question.pre_made_package.hotels.first.name }}</p>
                             <p class="card-text"><strong>Activity Name:</strong> {{ question.pre_made_package.activities.first.name }}</p>
+                            <!-- Answer box -->
+                            {% if question.answered %}
+                                <div class="answer-box">
+                                    <h5 class="card-title">Answer:</h5>
+                                    <p class="card-text answer-text">{{ question.answer_text }}</p>
+                                </div>
+                            {% else %}
+                                <div class="answer-box">
+                                    <h5 class="card-title">Answer:</h5>
+                                    <p class="card-text answer-text">the agent has not answered your question yet.</p>
+                                </div>
+                            {% endif %}
                             <!-- Update form (hidden by default) -->
                             <form id="update-form-{{ question.id }}" action="{% url 'update_question' question.id %}" method="post" style="display: none;">
                                 {% csrf_token %}
