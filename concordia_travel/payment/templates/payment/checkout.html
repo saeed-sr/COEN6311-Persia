@@ -102,7 +102,7 @@
 
 {% block extra_scripts %}
 <script>
-    var stripe = Stripe('your-publishable-key');
+    var stripe = Stripe('pk_test_51OxFsXRuihmsOiSaKiL5on7pb0488351D5adwZ2HCpBRR9UMHiA4dIB8OKtOhiFgf2X8N8wZWg3trH2fzloBCbVF00VxmcAZQ8');
     var elements = stripe.elements();
     var cardElement = elements.create('card');
     cardElement.mount('#card-element');

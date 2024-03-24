@@ -63,12 +63,12 @@ def view_bookings(request):
         'current_bookings': current_bookings,
         'old_bookings': old_bookings,
     }
-    print('test2')
+    print(context)
+    
     return render(request, 'booking/view_bookings.html', context)
 
 @login_required
 def booking_detail(request, booking_id):
-    print('test3')
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
 
     # Pass the booking to the template

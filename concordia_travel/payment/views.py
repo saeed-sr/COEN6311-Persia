@@ -40,7 +40,10 @@ def checkout(request, booking_id):
                 },
             )
             # If creation is successful, send client secret to the frontend
-            return render(request, 'payment_success.html', {'client_secret': payment_intent.client_secret})
+            # payment_success(request, booking_id)
+            # return render(request, 'payment/payment_success.html', {'client_secret': payment_intent.client_secret})
+            return redirect('payment_success', booking_id=booking_id)  # Redirect to the payment success view
+
         except Exception as e:
             # Print the exception for debugging
             print(e)
@@ -69,6 +72,8 @@ def payment_success(request, booking_id):
     # Update the status to 'paid' or 'complete'
     booking.status = 'paid'  # or 'complete', depending on your STATUS_CHOICES in the Booking model
     booking.save()
+
+    print(booking)
 
     # Render the payment success template
     return render(request, 'payment/payment_success.html', {'booking': booking})
