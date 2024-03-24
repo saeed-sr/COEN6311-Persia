@@ -1,8 +1,10 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect, get_object_or_404
 from django.contrib.auth.models import User, auth, Group
 from django.contrib import messages
 from .forms import UserUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from packages.models import Question
+
 # from django.contrib.auth import update_password
 
 
@@ -69,12 +71,20 @@ def logout(request):
     return redirect('/')
 
 
-def user_dashboard(request):
-    pass
+
 
 @login_required
 def user_dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    # Retrieve questions associated with the current user
+    user_questions = Question.objects.filter(user=request.user)
+    return render(request, 'accounts/dashboard.html', {'user_questions': user_questions})
+
+@login_required
+def delete_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == 'POST':
+        question.delete()
+    return redirect('dashboard')
 
 @login_required
 def edit_profile(request):

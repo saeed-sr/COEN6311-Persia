@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from datetime import datetime
 
 class Flight(models.Model):
     flight_number = models.CharField(max_length=10)
@@ -143,6 +144,8 @@ class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='asked_questions')
     pre_made_package = models.ForeignKey(PreMadePackage, on_delete=models.CASCADE, related_name='questions')
     question_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    answer_text = models.TextField(default='Not answered yet')
     answered = models.BooleanField(default=False)
 
     def __str__(self):
