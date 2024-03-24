@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from booking.models import Booking
+from django.contrib import messages
+
 
 # Set your secret key: remember to change this to your live secret key in production
 # See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -76,7 +78,15 @@ def payment_success(request, booking_id):
     print(booking)
 
     # Render the payment success template
+
+    # Inform the user of the successful payment
+    messages.success(request, "Payment was successful. Have fun!.")
+
     return render(request, 'payment/payment_success.html', {'booking': booking})
+
+
+    # Redirect to the view_bookings page
+    # return redirect('view_bookings')
 
 
 def payment(request, booking_id):

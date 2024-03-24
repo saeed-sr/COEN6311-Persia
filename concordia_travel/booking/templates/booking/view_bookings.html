@@ -9,15 +9,13 @@
     <h2>Your Bookings</h2>
     <div class="row">
         <div class="col-md-6">
-
             <h3>Current Custom Packages</h3>
             {% for booking in current_bookings %}
                 <div class="card mb-3">
+                    <div class="card-header {% if booking.status == 'reserved' %}bg-warning{% endif %} text-white">
+                        {{ booking.get_status_display }}
+                    </div>
                     <div class="card-body">
-                        {% if booking.status == 'reserved' %}
-                            <div class="card-header bg-warning text-white">Reserved</div>
-                        {% endif %}
-                        
                         <p>User: {{ booking.user.username }}</p>
                         <p>Flights:
                             {% for flight in booking.custom_package.flights.all %}
@@ -40,23 +38,17 @@
                                 No activities
                             {% endfor %}
                         </p>
-        
                         {% if booking.status == 'reserved' %}
-                            <!-- Moved the "Pay Now" button to the bottom -->
                             <a href="{% url 'checkout' booking.id %}" class="btn btn-success">Pay Now</a>
-
                         {% elif booking.status == 'none' %}
-                            <!-- This form will submit a POST request to the 'complete_booking' view -->
                             <form method="post" action="{% url 'complete_booking' booking.custom_package.id %}">
                                 {% csrf_token %}
                                 <input type="submit" value="Complete Booking" class="btn btn-primary">
                             </form>
-
                             <form method="post" action="{% url 'delete_booking' booking.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this booking?');">Delete</button>
                             </form>
-
                         {% endif %}
                     </div>
                 </div>
@@ -64,38 +56,36 @@
                 <p>No current custom packages.</p>
             {% endfor %}
         </div>
-        
 
         <div class="col-md-6">
             <h3>Old Bookings</h3>
             {% for booking in old_bookings %}
                 <div class="card mb-3">
                     <div class="card-header bg-success text-white">Completed</div>
-                        <div class="card-body">
-                            <p>User: {{ booking.user.username }}</p>
-                            <p>Flights:
-                                {% for flight in booking.custom_package.flights.all %}
-                                    {{ flight.airline }} - {{ flight.flight_number }}<br>
-                                {% empty %}
-                                    No flights
-                                {% endfor %}
-                            </p>
-                            <p>Hotels:
-                                {% for hotel in booking.custom_package.hotels.all %}
-                                    {{ hotel.name }} in {{ hotel.city }}<br>
-                                {% empty %}
-                                    No hotels
-                                {% endfor %}
-                            </p>
-                            <p>Activities:
-                                {% for activity in booking.custom_package.activities.all %}
-                                    {{ activity.name }} - {{ activity.location }}<br>
-                                {% empty %}
-                                    No activities
-                                {% endfor %}
-                            </p>
-                            <a href="{% url 'share_your_experience' %}" class="btn btn-info">Share Your Experience</a>
-                        </div>
+                    <div class="card-body">
+                        <p>User: {{ booking.user.username }}</p>
+                        <p>Flights:
+                            {% for flight in booking.custom_package.flights.all %}
+                                {{ flight.airline }} - {{ flight.flight_number }}<br>
+                            {% empty %}
+                                No flights
+                            {% endfor %}
+                        </p>
+                        <p>Hotels:
+                            {% for hotel in booking.custom_package.hotels.all %}
+                                {{ hotel.name }} in {{ hotel.city }}<br>
+                            {% empty %}
+                                No hotels
+                            {% endfor %}
+                        </p>
+                        <p>Activities:
+                            {% for activity in booking.custom_package.activities.all %}
+                                {{ activity.name }} - {{ activity.location }}<br>
+                            {% empty %}
+                                No activities
+                            {% endfor %}
+                        </p>
+                        <a href="{% url 'share_your_experience' %}" class="btn btn-info">Share Your Experience</a>
                     </div>
                 </div>
             {% empty %}

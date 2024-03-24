@@ -37,7 +37,7 @@
                 <div class="alert alert-success" role="alert">
                     Your package has been reserved successfully. You have 1 hour to complete the payment.
                 </div>
-                <a href="{% url 'payment_process' booking.id %}" class="btn btn-success">Pay Now</a>
+                <a href="{% url 'checkout' booking.id %}" class="btn btn-success">Pay Now</a>
             {% elif booking.status == 'none' %}
                 <div class="alert alert-info" role="alert">
                     This booking has not been reserved. Would you like to complete the booking?
