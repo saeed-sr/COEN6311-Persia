@@ -1,11 +1,12 @@
 <!-- premade_packages.html -->
-{% extends 'packages/base.html' %}
 
+{% extends 'packages/base.html' %}
+ 
 {% block title %}Premade Packages - Concordia Travel{% endblock %}
 
 {% block content %}
   <h2>Premade Packages</h2>
-
+  
   {% if premade_packages %}
     <div class="row">
       {% for package in premade_packages %}
@@ -26,7 +27,24 @@
               </p>
               <p class="card-text">Price: ${{ package.calculate_total_price }}</p>
               <p class="card-text">Created by: {{ package.agency.username }}</p>
+              <!-- Q&A Section -->
+              <hr>
+              <h5>Ask a Question</h5>
+              {% if user.is_authenticated %}
+              <form method="post" action="{% url 'ask_question' package.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="question_text">Your Question:</label>
+                  <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Question</button>
+              </form>
+              {% else %}
+                <p class="mt-4">Please <a href="{% url 'login' %}">login</a> to add a comment.</p>
+              {% endif %}
+              <!-- End Q&A Section -->
               <!-- Add more details about the package as needed -->
+              <hr>
               <a href="#" class="btn btn-primary">Book Now</a>
             </div>
           </div>
@@ -36,4 +54,5 @@
   {% else %}
     <p>No premade packages available at the moment.</p>
   {% endif %}
+  
 {% endblock %}

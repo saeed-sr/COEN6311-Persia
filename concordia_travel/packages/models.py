@@ -138,3 +138,14 @@ class CommentActivity(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.activity.name} at {self.created_at}"
+    
+class Question(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='asked_questions')
+    pre_made_package = models.ForeignKey(PreMadePackage, on_delete=models.CASCADE, related_name='questions')
+    question_text = models.TextField()
+    answered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Question from {self.user.username}"
+    
+
