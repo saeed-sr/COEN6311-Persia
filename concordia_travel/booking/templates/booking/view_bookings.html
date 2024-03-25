@@ -38,7 +38,7 @@
                                 No activities
                             {% endfor %}
                         </p>
-                        {% if booking.status == 'reserved' %}
+                        {% if booking.status == 'reserved' %} 
                             <a href="{% url 'checkout' booking.id %}" class="btn btn-success">Pay Now</a>
                         {% elif booking.status == 'none' %}
                             <form method="post" action="{% url 'complete_booking' booking.custom_package.id %}">
