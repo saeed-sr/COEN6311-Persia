@@ -64,7 +64,7 @@ def view_bookings(request):
         'old_bookings': old_bookings,
     }
     print(context)
-    
+
     return render(request, 'booking/view_bookings.html', context)
 
 @login_required
@@ -88,3 +88,4 @@ def delete_booking(request, booking_id):
 @login_required
 def share_your_experience(request): 
     pass
+
