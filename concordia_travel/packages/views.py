@@ -146,7 +146,7 @@ def book_flight(request, pk):
         custom_package=custom_package,
         status='none'
     )
-    messages.success(request, 'Flight booked successfully!')
+    messages.success(request, 'Flight added to your dashboard')
     return redirect('flight_detail', pk=pk)
 
 
@@ -160,7 +160,7 @@ def book_hotel(request, pk):
         custom_package=custom_package,
         status='none'
     )
-    messages.success(request, 'Hotel booked successfully!')
+    messages.success(request, 'Hotel added to your dashboard')
     return redirect('hotel_detail', pk=pk)
 
 
@@ -175,7 +175,7 @@ def book_activity(request, pk):
         custom_package=custom_package,
         status='none'
     )
-    messages.success(request, 'Activity booked successfully!')
+    messages.success(request, 'Activity added to your dashboard')
     return redirect('activity_detail', pk=pk)
 
 
