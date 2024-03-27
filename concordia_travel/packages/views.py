@@ -239,8 +239,10 @@ class PremadePackageListView(ListView):
 @login_required
 def book_premade_package(request, pk):
     premade_package = get_object_or_404(PreMadePackage, pk=pk)
-    custom_package = CustomPackage.objects.create(user=request.user)
-    
+    custom_package = CustomPackage.objects.create(
+        user=request.user, 
+        agency=premade_package.agency
+    )    
     # Assuming you want to copy details from the premade package to the custom package
     custom_package.flights.set(premade_package.flights.all())
     custom_package.hotels.set(premade_package.hotels.all())
