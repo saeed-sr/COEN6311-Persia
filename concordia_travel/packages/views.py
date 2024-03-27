@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from django.contrib import messages
 
@@ -7,7 +7,7 @@ from django.db.models import Q
 from datetime import datetime
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage
+from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage,Question
 from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
 from django.contrib.auth.decorators import login_required
 
@@ -15,7 +15,11 @@ from django_tables2.views import SingleTableView
 from .tables import FlightTable, HotelTable, ActivityTable
 from booking.models import Booking
 
-
+from .forms import CommentFlightForm
+from .models import CommentFlight
+from .forms import CommentHotelForm
+from .models import CommentHotel
+from .forms import QuestionForm
 
 
 
@@ -123,17 +127,63 @@ def activity_list(request):
 
 
 # Detail views
+
 def flight_detail(request, pk):
     flight = get_object_or_404(Flight, pk=pk)
-    return render(request, 'packages/flight_detail.html', {'flight': flight})
+    comments = flight.comments.all()
+
+    if request.method == 'POST':
+        form = CommentFlightForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.flight = flight
+            comment.save()
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentFlightForm()
+
+    return render(request, 'packages/flight_detail.html', {'flight': flight, 'comments': comments, 'comment_form': form})
 
 def hotel_detail(request, pk):
     hotel = get_object_or_404(Hotel, pk=pk)
-    return render(request, 'packages/hotel_detail.html', {'hotel': hotel})
+    comments = hotel.comments.all()
+
+    if request.method == 'POST':
+        form = CommentHotelForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.hotel = hotel
+            comment.save()
+            messages.success(request, 'Your comment has been added successfully.')
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentHotelForm()
+
+    return render(request, 'packages/hotel_detail.html', {'hotel': hotel, 'comments': comments, 'comment_form': form})
+
+
+# views.py
+from .forms import CommentActivityForm
+from .models import CommentActivity
 
 def activity_detail(request, pk):
     activity = get_object_or_404(Activity, pk=pk)
-    return render(request, 'packages/activity_detail.html', {'activity': activity})
+    comments = activity.comments.all()
+
+    if request.method == 'POST':
+        form = CommentActivityForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.activity = activity
+            comment.save()
+            return HttpResponseRedirect(request.path_info)  # Redirect to the same page after posting a comment
+    else:
+        form = CommentActivityForm()
+
+    return render(request, 'packages/activity_detail.html', {'activity': activity, 'comments': comments, 'comment_form': form})
 
 
 @login_required
@@ -230,11 +280,21 @@ class CustomPackageDetailView(DetailView):
     context_object_name = 'custom_package'
 
 
+''''class PremadePackageListView(ListView):
+    model = PreMadePackage
+    template_name = 'packages/pre_made_package.html'
+    context_object_name = 'premade_packages'
+    '''
+
 class PremadePackageListView(ListView):
     model = PreMadePackage
     template_name = 'packages/pre_made_package.html'
     context_object_name = 'premade_packages'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['question_form'] = QuestionForm()  # Add the question form to the context
+        return context
 
 @login_required
 def book_premade_package(request, pk):
@@ -260,6 +320,24 @@ def book_premade_package(request, pk):
 
 
 
+
+def ask_question(request, package_id):
+    # Retrieve the selected premade package
+    package = PreMadePackage.objects.get(pk=package_id)
+    
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            # Save the question associated with the selected premade package and the current user
+            question = form.save(commit=False)
+            question.user = request.user
+            question.pre_made_package = package
+            question.save()
+            messages.success(request, 'Your question has been submitted successfully.')
+            return redirect('premade_packages')  # Redirect to the premade packages page after submitting the question
+    else:
+        form = QuestionForm()
+    return render(request, 'packages/premade_package.html', {'form': form, 'package': package})
 
 def add_flight(request):
     pass

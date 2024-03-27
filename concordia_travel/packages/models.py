@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from datetime import datetime
 
 class Flight(models.Model):
     flight_number = models.CharField(max_length=10)
@@ -131,4 +132,43 @@ class PreMadePackage(models.Model):
 
         return total_price
 
+
+class CommentFlight(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.flight.flight_number} at {self.created_at}"
+
+class CommentHotel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.hotel.name} at {self.created_at}"
+    
+class CommentActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.activity.name} at {self.created_at}"
+    
+class Question(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='asked_questions')
+    pre_made_package = models.ForeignKey(PreMadePackage, on_delete=models.CASCADE, related_name='questions')
+    question_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    answer_text = models.TextField(default='Not answered yet')
+    answered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Question from {self.user.username}"
+    
 
