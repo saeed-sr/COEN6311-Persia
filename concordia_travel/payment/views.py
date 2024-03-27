@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from booking.models import Booking
 from django.contrib import messages
+from .utils import send_booking_confirmation_email
 
 
 # Set your secret key: remember to change this to your live secret key in production
@@ -81,6 +82,9 @@ def payment_success(request, booking_id):
 
     # Inform the user of the successful payment
     messages.success(request, "Payment was successful. Have fun!.")
+
+    # Send a booking confirmation email 
+    send_booking_confirmation_email(request.user, booking)
 
     return render(request, 'payment/payment_success.html', {'booking': booking})
 

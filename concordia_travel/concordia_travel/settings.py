@@ -138,4 +138,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STRIPE_PUBLIC_KEY = 'pk_test_51OxFsXRuihmsOiSaKiL5on7pb0488351D5adwZ2HCpBRR9UMHiA4dIB8OKtOhiFgf2X8N8wZWg3trH2fzloBCbVF00VxmcAZQ8'
 STRIPE_SECRET_KEY = 'sk_test_51OxFsXRuihmsOiSa1N1pT63QxUkSrHlKChELUzrXPPX0NmGYO3IeFJQdKUHZpfxKOIPXzgcSCcwGgWWEpPn6JbN9006k7MEFhI'
 
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mandrillapp.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ConcordiaTravel.persia'  # Your SMTP Username
+EMAIL_HOST_PASSWORD = 'md-zvAoSxkc9JC5MYj94Jo1nA'  # Your valid API key from Mandrill
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'concordiatravel@concordiatravel.me'  # Ensure this matches your verified domain
+
+
+
+
 

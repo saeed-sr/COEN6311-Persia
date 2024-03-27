@@ -1,0 +1,13 @@
+Dear {{ user.first_name }},
+
+Thank you for your booking.
+
+Here are the details of your purchase:
+- Flight: {{ booking.custom_package.flights }}
+- Hotel: {{ booking.custom_package.hotels }}
+- Activities: {{ booking.custom_package.activities }}
+
+Your tracking ID is: {{ booking.tracking_id }}
+
+Best regards,
+Concordia Travel
