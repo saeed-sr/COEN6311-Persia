@@ -148,8 +148,6 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'concordiatravel@concordiatravel.me'  # Ensure this matches your verified domain
 
 
-
-
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'in-v3.mailjet.com'
 # EMAIL_USE_TLS = True
