@@ -19,5 +19,6 @@ urlpatterns = [
     path('custom-packages/<int:pk>/', views.CustomPackageDetailView.as_view(), name='custom-package-detail'),
 
     path('premade_packages/', views.PremadePackageListView.as_view(), name='premade_packages'),
+    path('premade_packages/book/<int:pk>/', views.book_premade_package, name='book_premade_package'),
     # Add more URL patterns for detail views, create views, etc.
 ]

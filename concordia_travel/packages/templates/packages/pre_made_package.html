@@ -27,7 +27,7 @@
               <p class="card-text">Price: ${{ package.calculate_total_price }}</p>
               <p class="card-text">Created by: {{ package.agency.username }}</p>
               <!-- Add more details about the package as needed -->
-              <a href="#" class="btn btn-primary">Book Now</a>
+              <a href="{% url 'book_premade_package' package.pk %}" class="btn btn-primary">Book Now</a>
             </div>
           </div>
         </div>

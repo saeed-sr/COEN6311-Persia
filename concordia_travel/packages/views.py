@@ -236,6 +236,27 @@ class PremadePackageListView(ListView):
     context_object_name = 'premade_packages'
 
 
+@login_required
+def book_premade_package(request, pk):
+    premade_package = get_object_or_404(PreMadePackage, pk=pk)
+    custom_package = CustomPackage.objects.create(
+        user=request.user, 
+        agency=premade_package.agency
+    )
+    custom_package.flights.set(premade_package.flights.all())
+    custom_package.hotels.set(premade_package.hotels.all())
+    custom_package.activities.set(premade_package.activities.all())
+    custom_package.save()
+    Booking.objects.create(
+        user=request.user,
+        custom_package=custom_package,
+        status='none'
+    )
+    messages.success(request, f"{premade_package.name} has been added to your dashboard.")
+    return HttpResponseRedirect(reverse('premade-package-detail', kwargs={'pk': premade_package.pk}))
+
+
+
 
 def add_flight(request):
     pass
