@@ -17,6 +17,11 @@
                     </div>
                     <div class="card-body">
                         <p>User: {{ booking.user.username }}</p>
+
+                        {% if booking.custom_package.agency %} <!-- Check if there's an associated agency -->
+                        <p>Agent: {{ booking.custom_package.agency.username }}</p> <!-- Display the agency/agent -->
+                        {% endif %}
+
                         <p>Flights:
                             {% for flight in booking.custom_package.flights.all %}
                                 {{ flight.airline }} - {{ flight.flight_number }}<br>
@@ -64,6 +69,11 @@
                     <div class="card-header bg-success text-white">Completed</div>
                     <div class="card-body">
                         <p>User: {{ booking.user.username }}</p>
+
+                        {% if booking.custom_package.agency %} <!-- Check if there's an associated agency -->
+                        <p>Agent: {{ booking.custom_package.agency.username }}</p> <!-- Display the agency/agent -->
+                        {% endif %}
+                        
                         <p>Flights:
                             {% for flight in booking.custom_package.flights.all %}
                                 {{ flight.airline }} - {{ flight.flight_number }}<br>
