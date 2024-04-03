@@ -3,16 +3,18 @@
 
 {% block title %}Agent Dashboard{% endblock %}
 
-
 {% block content %}
 <div class="container">
     <h1>Agent Dashboard</h1>
     <p>Total Revenue: ${{ total_revenue }}</p>
     <p>Revenue This Month: ${{ monthly_revenue }}</p>
-    <table class="table">
-        <thead>
+    <table class="table table-bordered">
+        <thead class="thead-light">
             <tr>
                 <th>Package</th>
+                <th>Flight</th>
+                <th>Hotel</th>
+                <th>Activity</th>
                 <th>Bookings</th>
                 <th>Revenue</th>
             </tr>
@@ -21,6 +23,27 @@
             {% for data in package_data %}
             <tr>
                 <td>{{ data.package.name }}</td>
+                <td>
+                    {% for flight in data.package.flights.all %}
+                        {{ flight.airline }} - {{ flight.flight_number }}<br>
+                    {% empty %}
+                        No flights
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for hotel in data.package.hotels.all %}
+                        {{ hotel.name }}<br>
+                    {% empty %}
+                        No hotels
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for activity in data.package.activities.all %}
+                        {{ activity.name }}<br>
+                    {% empty %}
+                        No activities
+                    {% endfor %}
+                </td>
                 <td>{{ data.booking_count }}</td>
                 <td>${{ data.revenue }}</td>
             </tr>
