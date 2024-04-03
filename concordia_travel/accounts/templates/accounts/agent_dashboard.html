@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Agent Dashboard{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>Agent Dashboard</h1>
+    <p>Total Revenue: ${{ total_revenue }}</p>
+    <p>Revenue This Month: ${{ monthly_revenue }}</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Package</th>
+                <th>Bookings</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in package_data %}
+            <tr>
+                <td>{{ data.package.name }}</td>
+                <td>{{ data.booking_count }}</td>
+                <td>${{ data.revenue }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

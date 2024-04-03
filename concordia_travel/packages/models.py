@@ -80,6 +80,8 @@ class CustomPackage(models.Model):
         return total_price
     
 
+    
+
 class AgentManager(models.Manager):
     def get_queryset(self):
         # Only return PreMadePackages created by users in the "agents" group

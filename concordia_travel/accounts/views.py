@@ -4,6 +4,13 @@ from django.contrib import messages
 from .forms import UserUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from packages.models import Question
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render
+from django.db.models import Sum
+from datetime import datetime
+from packages.models import PreMadePackage
+from booking.models import Booking
+from django.db.models import Q
 
 # from django.contrib.auth import update_password
 
@@ -132,6 +139,44 @@ def is_agent(user):
     return user.groups.filter(name='agents').exists()
 
 
+@login_required
+@user_passes_test(is_agent)
 def agent_dashboard(request):
-    pass
+    # Get all premade packages created by the agent
+    premade_packages = PreMadePackage.objects.filter(agency=request.user)
+
+    # Calculate bookings and revenues
+    package_data = []
+    total_revenue = 0
+    monthly_revenue = 0
+    current_month = datetime.now().month
+
+    for package in premade_packages:
+        # Get all CustomPackage objects that include any of the flights, hotels, or activities of the current premade package
+        bookings = Booking.objects.filter(
+            Q(custom_package__flights__in=package.flights.all()) | 
+            Q(custom_package__hotels__in=package.hotels.all()) | 
+            Q(custom_package__activities__in=package.activities.all()), 
+            custom_package__agency=request.user
+        ).distinct()
+        booking_count = bookings.count()
+        revenue = sum(b.custom_package.get_total_price() for b in bookings)
+        monthly_bookings = bookings.filter(date_created__month=current_month)
+        monthly_revenue += sum(b.custom_package.get_total_price() for b in monthly_bookings)
+        total_revenue += revenue
+
+        package_data.append({
+            'package': package,
+            'booking_count': booking_count,
+            'revenue': revenue
+        })
+
+    context = {
+        'package_data': package_data,
+        'total_revenue': total_revenue,
+        'monthly_revenue': monthly_revenue,
+    }
+
+    return render(request, 'accounts/agent_dashboard.html', context)
+
 

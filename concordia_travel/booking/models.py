@@ -16,6 +16,7 @@ class Booking(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='none')
     reserved_until = models.DateTimeField(null=True, blank=True)  # Add this field to track reservation expiration
     tracking_id = models.CharField(max_length=64, editable=False, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username}'s booking for package {self.custom_package.id} - Status: {self.get_status_display()}"
