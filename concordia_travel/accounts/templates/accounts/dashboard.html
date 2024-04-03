@@ -152,16 +152,16 @@
                                 {% csrf_token %}
                                 <input type="text" name="updated_question_text" id="updated-question-text-{{ question.id }}" class="question-input" value="{{ question.question_text }}">
                                 <button type="submit" class="btn btn-success mt-2">Update</button>
-                                <button type="button" class="btn btn-secondary mt-2" onclick="cancelUpdate({{ question.id }})">Cancel</button>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="cancelUpdate('{{ question.id }}')">Cancel</button>
                             </form>
 
                             <!-- Update button -->
-                            <button class="update-button" onclick="editQuestion({{ question.id }})">Update</button>
+                            <button class="update-button" onclick="editQuestion('{{ question.id }}')">Update</button>
 
                             <!-- Delete button -->
                             <form id="delete-form-{{ question.id }}" action="{% url 'delete_question' question.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="button" class="delete-button" onclick="confirmDelete({{ question.id }})">Delete</button>
+                                <button type="button" class="delete-button" onclick="confirmDelete('{{ question.id }}')">Delete</button>
                             </form>
                         </div>
                     </div>
