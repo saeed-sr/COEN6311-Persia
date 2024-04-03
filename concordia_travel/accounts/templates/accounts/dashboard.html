@@ -105,6 +105,14 @@
                     <!-- More user details here -->
                     <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
                     <a href="{% url 'view_bookings' %}" class="btn btn-secondary">View Bookings</a>
+
+                    <!-- Button visible only to agents -->
+                    {% for group in user.groups.all %}
+                    {% if group.name == "agents" %}
+                        <a href="{% url 'agent_dashboard' %}" class="btn btn-info">Agent Dashboard</a>
+                    {% endif %}
+                    {% endfor %}
+
                 </div>
             </div>
 

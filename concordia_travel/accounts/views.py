@@ -131,3 +131,7 @@ def edit_profile(request):
 def is_agent(user):
     return user.groups.filter(name='agents').exists()
 
+
+def agent_dashboard(request):
+    pass
+
