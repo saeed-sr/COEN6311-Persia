@@ -1,0 +1,30 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Booking Details{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h2>Booking Details</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in booking_details %}
+            <tr>
+                <td>{{ detail.username }}</td>
+                <td>{{ detail.first_name }}</td>
+                <td>{{ detail.last_name }}</td>
+                <td>{{ detail.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

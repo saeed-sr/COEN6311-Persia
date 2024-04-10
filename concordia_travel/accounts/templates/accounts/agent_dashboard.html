@@ -19,6 +19,8 @@
     </div>
 
     <div class="table-responsive">
+        <h2>My Pre-Made Packages</h2>
+
         <table class="table table-hover">
             <thead class="thead-light">
                 <tr>
@@ -62,6 +64,46 @@
             </tbody>
         </table>
     </div>
+    <!-- Tables for Flights, Hotels, and Activities -->
+    <div class="table-responsive">
+        <h2>My Flights</h2>
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Airline</th>
+                    <th>Departure City</th>
+                    <th>Arrival City</th>
+                    <th>Departure Time</th>
+                    <th>Duration</th>
+                    <th>Price</th>
+                    <th>Bookings</th>
+                    <th>Revenue</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight_data in flights_data %}
+            <tr>
+                <td>{{ flight_data.flight.flight_number }}</td>
+                <td>{{ flight_data.flight.airline }}</td>
+                <td>{{ flight_data.flight.departure_city }}</td>
+                <td>{{ flight_data.flight.arrival_city }}</td>
+                <td>{{ flight_data.flight.departure_time }}</td>
+                <td>{{ flight_data.flight.duration }}</td>
+                <td>{{ flight_data.flight.price }}</td>
+                <td><a href="{% url 'agent_booking_detail' flight_data.flight.id %}">{{ flight_data.booking_count }}</a></td>
+                <td>${{ flight_data.revenue }}</td>
+            </tr>
+                {% empty %}
+                <tr><td colspan="7">No flights added.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Repeat the structure above for Hotels and Activities -->
+
 </div>
 
 {% endblock %}

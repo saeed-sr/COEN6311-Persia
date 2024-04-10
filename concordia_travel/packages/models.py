@@ -24,6 +24,8 @@ class Hotel(models.Model):
     phone_number = models.CharField(max_length=15)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    agency = models.ForeignKey(User, related_name='hotels_agent', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} in {self.city}"
@@ -38,6 +40,8 @@ class Activity(models.Model):
     duration = models.DurationField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    agency = models.ForeignKey(User, related_name='activitys_agent', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} - {self.location}"
