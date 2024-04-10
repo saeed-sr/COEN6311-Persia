@@ -348,9 +348,6 @@ def is_agent(user):
 def add_flight(request):
     if request.method == 'POST':
         form = FlightForm(request.POST)
-
-        print(form.is_valid()) 
-        print(form.errors)
         
         if form.is_valid():
 
@@ -359,18 +356,45 @@ def add_flight(request):
             flight.save()
 
             messages.success(request, 'Flight added successfully!')
-            print('test')
             return redirect('agent_dashboard')  # Redirect to the agent dashboard or the appropriate URL
     else:
         form = FlightForm()
 
     return render(request, 'packages/add_flight.html', {'form': form})
 
-def add_hotel(request):
-    pass
 
+@login_required
+@user_passes_test(is_agent)
+def add_hotel(request):
+    if request.method == 'POST':
+        form = HotelForm(request.POST)
+        if form.is_valid():
+            hotel = form.save(commit=False)
+            hotel.agency = request.user
+            hotel.save()
+            messages.success(request, 'Hotel added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = HotelForm()
+    return render(request, 'packages/add_hotel.html', {'form': form})
+
+
+@login_required
+@user_passes_test(is_agent)
 def add_activity(request):
-    pass    
+    if request.method == 'POST':
+        form = ActivityForm(request.POST)
+        if form.is_valid():
+            hotel = form.save(commit=False)
+            hotel.agency = request.user
+            hotel.save()
+            messages.success(request, 'Activity added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = ActivityForm()
+    return render(request, 'packages/add_activity.html', {'form': form}) 
+
+
 
 def add_premade_package(request):
     pass

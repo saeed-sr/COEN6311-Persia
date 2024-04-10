@@ -20,7 +20,7 @@ class Flight(models.Model):
 
 class Hotel(models.Model):
     name = models.CharField(max_length=100)
-    city = models.TextField(max_length=100)
+    city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)  # Allows for an optional description

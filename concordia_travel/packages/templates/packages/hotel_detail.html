@@ -7,10 +7,17 @@ Hotel Details
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">{{ hotel.name }} Details</h1>
+    {%if hotel.agency %}
+        <p><strong>Agency:</strong> {{ hotel.agency }}</p>
+    {%endif%}
+
     <p><strong>City:</strong> {{ hotel.city }}</p>
     <p><strong>Phone Number:</strong> {{ hotel.phone_number }}</p>
     <p><strong>Price per Night:</strong> ${{ hotel.price }}</p>
-    <p>{{ hotel.description }}</p>
+    
+    {%if hotel.description%}
+        <p>{{ hotel.description }}</p>
+    {%endif%}
     
     <!-- Booking Button -->
     <form action="{% url 'book_hotel' hotel.pk %}" method="post">

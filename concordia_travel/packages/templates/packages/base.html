@@ -118,7 +118,7 @@
             }
         }
 
-        .add-flight-form-container {
+        .add-form-container {
             max-width: 600px;
             margin: auto;
             padding: 2rem;
@@ -130,7 +130,7 @@
             align-items: center; /* Aligns children (form elements) to the center */
         }
 
-        .add-flight-form-header {
+        .add-form-header {
             text-align: center; /* Centers the header text */
             width: 100%; /* Ensures the header takes the full width */
             margin-bottom: 2rem;
@@ -149,12 +149,12 @@
             text-align: right;
         }
 
-        .form-group input {
-            width: calc(100% - 160px); /* adjust width of input based on label width and margin */
+        .form-group input,
+        .form-group textarea {
+            width: calc(100% - 160px); /* adjust width of input/textarea based on label width and margin */
             padding: 0.5rem;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin: 0; /* reset default margin */
         }
 
         .btn-success {

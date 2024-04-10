@@ -250,15 +250,12 @@ def agent_dashboard(request):
 
 
     context = {
-        'package_data': package_data,
-        'flights_data': flights_booking_data,
-        'hotels_data': hotels_booking_data,
-        'activities_data': activities_booking_data,
-        'total_revenue': total_revenue,
-        'monthly_revenue': monthly_revenue,
-        'agent_flights': flights_data,
-        'agent_hotels': hotels_data,
-        'agent_activities': activities_data,
+    'package_data': package_data,
+    'flights_data': flights_data, 
+    'hotels_data': hotels_data,
+    'activities_data': activities_data,
+    'total_revenue': total_revenue,
+    'monthly_revenue': monthly_revenue,
     }
 
     return render(request, 'accounts/agent_dashboard.html', context)
@@ -269,6 +266,41 @@ def agent_dashboard(request):
 def flight_booking_detail(request, flight_id):
     # Find CustomPackages that include the specific flight
     custom_packages = CustomPackage.objects.filter(flights__id=flight_id)
+    
+    # Find bookings for these CustomPackages
+    bookings = Booking.objects.filter(custom_package__in=custom_packages).distinct()
+    booking_details = [{
+        'username': booking.user.username,
+        'first_name': booking.user.first_name,
+        'last_name': booking.user.last_name,
+        'email': booking.user.email,
+    } for booking in bookings]
+
+    return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
+
+
+@login_required
+@user_passes_test(is_agent)
+def hotel_booking_detail(request, hotel_id):
+    # Find CustomPackages that include the specific hotel
+    custom_packages = CustomPackage.objects.filter(hotels__id=hotel_id)
+    
+    # Find bookings for these CustomPackages
+    bookings = Booking.objects.filter(custom_package__in=custom_packages).distinct()
+    booking_details = [{
+        'username': booking.user.username,
+        'first_name': booking.user.first_name,
+        'last_name': booking.user.last_name,
+        'email': booking.user.email,
+    } for booking in bookings]
+
+    return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
+
+@login_required
+@user_passes_test(is_agent)
+def activity_booking_detail(request, activity_id):
+    # Find CustomPackages that include the specific activity
+    custom_packages = CustomPackage.objects.filter(activities__id=activity_id)
     
     # Find bookings for these CustomPackages
     bookings = Booking.objects.filter(custom_package__in=custom_packages).distinct()
