@@ -266,16 +266,17 @@ def agent_dashboard(request):
 
 @login_required
 @user_passes_test(is_agent)
-def booking_detail(request, package_id):
-    bookings = Booking.objects.filter(custom_package_id=package_id)
-    booking_details = [
-        {
-            'username': booking.user.username,
-            'first_name': booking.user.first_name,
-            'last_name': booking.user.last_name,
-            'email': booking.user.email,
-            # 'phone_number': booking.user.profile.phone_number,  # Assuming phone number is in a related profile model
-        }
-        for booking in bookings
-    ]
+def flight_booking_detail(request, flight_id):
+    # Find CustomPackages that include the specific flight
+    custom_packages = CustomPackage.objects.filter(flights__id=flight_id)
+    
+    # Find bookings for these CustomPackages
+    bookings = Booking.objects.filter(custom_package__in=custom_packages).distinct()
+    booking_details = [{
+        'username': booking.user.username,
+        'first_name': booking.user.first_name,
+        'last_name': booking.user.last_name,
+        'email': booking.user.email,
+    } for booking in bookings]
+
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})

@@ -11,6 +11,8 @@ urlpatterns = [
     path('update_question/<int:question_id>/', views.update_question, name='update_question'),
 
     path('agent_dashboard/', views.agent_dashboard, name='agent_dashboard'),
-    path('agent_dashboard/bookings/<int:package_id>/', views.booking_detail, name='agent_booking_detail'),
+    # path('agent_dashboard/bookings/<int:package_id>/', views.booking_detail, name='agent_booking_detail'),
+    path('agent_dashboard/bookings/flight/<int:flight_id>/', views.flight_booking_detail, name='agent_flight_booking_detail'),
+
 
     ]

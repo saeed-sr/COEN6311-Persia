@@ -92,7 +92,7 @@
                 <td>{{ flight_data.flight.departure_time }}</td>
                 <td>{{ flight_data.flight.duration }}</td>
                 <td>{{ flight_data.flight.price }}</td>
-                <td><a href="{% url 'agent_booking_detail' flight_data.flight.id %}">{{ flight_data.booking_count }}</a></td>
+                <td><a href="{% url 'agent_flight_booking_detail' flight_data.flight.id %}">{{ flight_data.booking_count }}</a></td>
                 <td>${{ flight_data.revenue }}</td>
             </tr>
                 {% empty %}
