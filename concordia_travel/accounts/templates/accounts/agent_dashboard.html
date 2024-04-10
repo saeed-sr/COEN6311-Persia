@@ -4,60 +4,64 @@
 {% block title %}Agent Dashboard{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Agent Dashboard</h1>
-    <p>Total Revenue: ${{ total_revenue }}</p>
-    <p>Revenue This Month: ${{ monthly_revenue }}</p>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1>Agent Dashboard</h1>
+        <p class="lead">Total Revenue: <strong>${{ total_revenue }}</strong></p>
+        <p class="lead">Revenue This Month: <strong>${{ monthly_revenue }}</strong></p>
+    </div>
     
-    <div class="package-operations my-3">
-        <a href="{% url 'add_flight' %}" class="btn btn-primary">Add Flights</a>
-        <a href="{% url 'add_hotel' %}" class="btn btn-primary">Add Hotels</a>
-        <a href="{% url 'add_activity' %}" class="btn btn-primary">Add Activity</a>
-        <a href="{% url 'add_premade_package' %}" class="btn btn-primary">Add Premade Package</a>
+    <div class="d-flex justify-content-between mb-4">
+        <a href="{% url 'add_flight' %}" class="btn btn-primary btn-lg">Add Flights</a>
+        <a href="{% url 'add_hotel' %}" class="btn btn-primary btn-lg">Add Hotels</a>
+        <a href="{% url 'add_activity' %}" class="btn btn-primary btn-lg">Add Activity</a>
+        <a href="{% url 'add_premade_package' %}" class="btn btn-primary btn-lg">Add Premade Package</a>
     </div>
 
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>Package</th>
-                <th>Flight</th>
-                <th>Hotel</th>
-                <th>Activity</th>
-                <th>Bookings</th>
-                <th>Revenue</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in package_data %}
-            <tr>
-                <td>{{ data.package.name }}</td>
-                <td>
-                    {% for flight in data.package.flights.all %}
-                        {{ flight.airline }} - {{ flight.flight_number }}<br>
-                    {% empty %}
-                        No flights
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for hotel in data.package.hotels.all %}
-                        {{ hotel.name }}<br>
-                    {% empty %}
-                        No hotels
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for activity in data.package.activities.all %}
-                        {{ activity.name }}<br>
-                    {% empty %}
-                        No activities
-                    {% endfor %}
-                </td>
-                <td>{{ data.booking_count }}</td>
-                <td>${{ data.revenue }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Package</th>
+                    <th>Flight</th>
+                    <th>Hotel</th>
+                    <th>Activity</th>
+                    <th>Bookings</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in package_data %}
+                <tr>
+                    <td>{{ data.package.name }}</td>
+                    <td>
+                        {% for flight in data.package.flights.all %}
+                            {{ flight.airline }} - {{ flight.flight_number }}<br>
+                        {% empty %}
+                            No flights
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for hotel in data.package.hotels.all %}
+                            {{ hotel.name }}<br>
+                        {% empty %}
+                            No hotels
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for activity in data.package.activities.all %}
+                            {{ activity.name }}<br>
+                        {% empty %}
+                            No activities
+                        {% endfor %}
+                    </td>
+                    <td>{{ data.booking_count }}</td>
+                    <td>${{ data.revenue }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}
