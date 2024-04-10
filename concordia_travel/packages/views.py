@@ -9,7 +9,7 @@ from datetime import datetime
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage,Question
 from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required ,user_passes_test
 
 from django_tables2.views import SingleTableView
 from .tables import FlightTable, HotelTable, ActivityTable
@@ -340,9 +340,31 @@ def ask_question(request, package_id):
     return render(request, 'packages/premade_package.html', {'form': form, 'package': package})
 
 
+def is_agent(user):
+    return user.groups.filter(name='agents').exists()
 
+@login_required
+@user_passes_test(is_agent)
 def add_flight(request):
-    pass
+    if request.method == 'POST':
+        form = FlightForm(request.POST)
+
+        print(form.is_valid()) 
+        print(form.errors)
+        
+        if form.is_valid():
+
+            flight = form.save(commit=False)
+            flight.agency = request.user
+            flight.save()
+
+            messages.success(request, 'Flight added successfully!')
+            print('test')
+            return redirect('agent_dashboard')  # Redirect to the agent dashboard or the appropriate URL
+    else:
+        form = FlightForm()
+
+    return render(request, 'packages/add_flight.html', {'form': form})
 
 def add_hotel(request):
     pass

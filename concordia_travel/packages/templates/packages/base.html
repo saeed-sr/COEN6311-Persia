@@ -117,6 +117,69 @@
                 margin-bottom: 10px;
             }
         }
+
+        .add-flight-form-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Aligns children (form elements) to the center */
+        }
+
+        .add-flight-form-header {
+            text-align: center; /* Centers the header text */
+            width: 100%; /* Ensures the header takes the full width */
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            width: 100%;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 140px; /* fixed width for labels */
+            margin-right: 20px; /* space between label and input */
+            text-align: right;
+        }
+
+        .form-group input {
+            width: calc(100% - 160px); /* adjust width of input based on label width and margin */
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 0; /* reset default margin */
+        }
+
+        .btn-success {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+            margin-top: 1rem; /* Spacing above the button */
+            width: auto; /* Makes the button wrap its content */
+            align-self: center; /* Align the button to the center */
+        }
+
+        .btn-success-add:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Ensure consistent styling for all input elements */
+        form input {
+            box-sizing: border-box; /* include padding and border in the element's total width and height */
+            margin: 0; /* override default margins */
+            padding: 8px; /* consistent padding */
+        }
+
     </style>
 </head>
 <body>

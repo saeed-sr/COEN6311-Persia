@@ -10,7 +10,8 @@ class Flight(models.Model):
     departure_time = models.DateTimeField()
     duration = models.DurationField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    description = models.TextField(blank=True, null=True)
+    agency = models.ForeignKey(User, related_name='flights_agent', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.airline} - {self.flight_number} ({self.departure_city} to {self.arrival_city})"
