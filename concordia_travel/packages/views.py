@@ -339,5 +339,16 @@ def ask_question(request, package_id):
         form = QuestionForm()
     return render(request, 'packages/premade_package.html', {'form': form, 'package': package})
 
+
+
 def add_flight(request):
+    pass
+
+def add_hotel(request):
+    pass
+
+def add_activity(request):
+    pass    
+
+def add_premade_package(request):
     pass

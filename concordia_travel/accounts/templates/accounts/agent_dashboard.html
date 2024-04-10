@@ -8,6 +8,14 @@
     <h1>Agent Dashboard</h1>
     <p>Total Revenue: ${{ total_revenue }}</p>
     <p>Revenue This Month: ${{ monthly_revenue }}</p>
+    
+    <div class="package-operations my-3">
+        <a href="{% url 'add_flight' %}" class="btn btn-primary">Add Flights</a>
+        <a href="{% url 'add_hotel' %}" class="btn btn-primary">Add Hotels</a>
+        <a href="{% url 'add_activity' %}" class="btn btn-primary">Add Activity</a>
+        <a href="{% url 'add_premade_package' %}" class="btn btn-primary">Add Premade Package</a>
+    </div>
+
     <table class="table table-bordered">
         <thead class="thead-light">
             <tr>
