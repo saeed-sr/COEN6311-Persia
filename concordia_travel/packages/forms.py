@@ -4,7 +4,7 @@ from .models import Flight, Hotel, Activity, CustomPackage,CommentFlight,Comment
 class FlightForm(forms.ModelForm):
     class Meta:
         model = Flight
-        fields = ['flight_number', 'airline', 'departure_city', 'arrival_city', 'departure_time', 'duration', 'price', 'agency']
+        fields = ['flight_number', 'airline', 'departure_city', 'arrival_city', 'departure_time', 'duration', 'price']
 
 class HotelForm(forms.ModelForm):
     class Meta:

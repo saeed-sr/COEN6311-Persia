@@ -7,12 +7,20 @@ Flight Details
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">{{ flight.airline }} - Flight {{ flight.flight_number }}</h1>
+
+    {%if flight.agency%}
+    <p><strong>Agency:</strong> {{ flight.agency }}</p>
+    {%endif%}
+
     <p><strong>Departure City:</strong> {{ flight.departure_city }}</p>
     <p><strong>Arrival City:</strong> {{ flight.arrival_city }}</p>
     <p><strong>Departure Time:</strong> {{ flight.departure_time }}</p>
     <p><strong>Duration:</strong> {{ flight.duration }}</p>
     <p><strong>Price:</strong> ${{ flight.price }}</p>
+
+    {%if flight.description%}
     <p>{{ flight.description }}</p>
+    {%endif%}
     
     <!-- Booking Button -->
     <form action="{% url 'book_flight' flight.pk %}" method="post">

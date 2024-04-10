@@ -2,42 +2,30 @@
 
 {% block title %}Add Flight{% endblock %}
 
-
 {% block content %}
 <div class="add-flight-form-container">
     <h1 class="add-flight-form-header">Add New Flight</h1>
-
     <form method="post" class="w-100">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors.as_text }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
         
-        <div class="form-group">
-            <label for="id_flight_number">Flight number:</label>
-            {{ form.flight_number }}
-        </div>
-        <div class="form-group">
-            <label for="id_airline">Airline:</label>
-            {{ form.airline }}
-        </div>
-        <div class="form-group">
-            <label for="id_departure_city">Departure city:</label>
-            {{ form.departure_city }}
-        </div>
-        <div class="form-group">
-            <label for="id_arrival_city">Arrival city:</label>
-            {{ form.arrival_city }}
-        </div>
-        <div class="form-group">
-            <label for="id_departure_time">Departure time:</label>
-            {{ form.departure_time }}
-        </div>
-        <div class="form-group">
-            <label for="id_duration">Duration:</label>
-            {{ form.duration }}
-        </div>
-        <div class="form-group">
-            <label for="id_price">Price:</label>
-            {{ form.price }}
-        </div>
         <button type="submit" class="btn btn-success">Add Flight</button>
     </form>
 </div>
