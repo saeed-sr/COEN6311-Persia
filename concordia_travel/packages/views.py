@@ -8,7 +8,7 @@ from datetime import datetime
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage,Question
-from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
+from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm, PreMadePackageForm
 from django.contrib.auth.decorators import login_required ,user_passes_test
 
 from django_tables2.views import SingleTableView
@@ -396,5 +396,18 @@ def add_activity(request):
 
 
 
+@login_required
+@user_passes_test(is_agent)
 def add_premade_package(request):
-    pass
+    if request.method == 'POST':
+        form = PreMadePackageForm(request.POST, user=request.user)  # Pass the user to the form
+        if form.is_valid():
+            premade_package = form.save(commit=False)
+            premade_package.agency = request.user
+            premade_package.save()
+            form.save_m2m()  # This is necessary for saving ManyToMany relationships
+            messages.success(request, 'Premade Package added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = PreMadePackageForm(user=request.user)  # Pass the user to the form
+    return render(request, 'packages/add_premade_package.html', {'form': form})
