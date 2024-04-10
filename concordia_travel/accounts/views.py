@@ -168,10 +168,17 @@ def agent_dashboard(request):
         monthly_revenue += sum(booking.custom_package.get_total_price() for booking in monthly_bookings)
         total_revenue += revenue
 
+        # Get the user details from the bookings
+        users_booked = bookings.values_list('user__username', 'user__first_name', 'user__last_name', 'user__email').distinct()
+
+        # Convert the query result to a list of dictionaries
+        users_details = [{'username': user[0], 'first_name': user[1], 'last_name': user[2], 'email': user[3]} for user in users_booked]
+
         package_data.append({
             'package': package,
             'booking_count': booking_count,
-            'revenue': revenue
+            'revenue': revenue,
+            'users_details': users_details  # Add the users details to the package data
         })
 
     # Fetch flights, hotels, and activities added by the agent
@@ -179,7 +186,6 @@ def agent_dashboard(request):
     hotels_data = Hotel.objects.filter(agency=request.user)
     activities_data = Activity.objects.filter(agency=request.user)
 
-    print(flights_data)
 
     # Calculate the bookings and revenue for each type of product
     flights_booking_data = [
@@ -304,6 +310,34 @@ def activity_booking_detail(request, activity_id):
     
     # Find bookings for these CustomPackages
     bookings = Booking.objects.filter(custom_package__in=custom_packages).distinct()
+    booking_details = [{
+        'username': booking.user.username,
+        'first_name': booking.user.first_name,
+        'last_name': booking.user.last_name,
+        'email': booking.user.email,
+    } for booking in bookings]
+
+    return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
+
+@login_required
+@user_passes_test(is_agent)
+def premade_package_booking_detail(request, package_id):
+    # Get the premade package for the current agent
+    try:
+        premade_package = PreMadePackage.objects.get(id=package_id, agency=request.user)
+    except PreMadePackage.DoesNotExist:
+        messages.error(request, "Premade package not found.")
+        return redirect('agent_dashboard')
+
+    # Collect the bookings for the flights, hotels, and activities in the premade package
+    bookings = Booking.objects.filter(
+        Q(custom_package__flights__in=premade_package.flights.all()) | 
+        Q(custom_package__hotels__in=premade_package.hotels.all()) | 
+        Q(custom_package__activities__in=premade_package.activities.all()),
+        custom_package__agency=request.user
+    ).distinct()
+
+    # Create a list of user details from the bookings
     booking_details = [{
         'username': booking.user.username,
         'first_name': booking.user.first_name,
