@@ -12,6 +12,8 @@ from packages.models import PreMadePackage
 from booking.models import Booking
 from django.db.models import Q
 from django.utils.timezone import now
+from notifications.models import Notification
+
 
 # from django.contrib.auth import update_password
 
@@ -85,7 +87,15 @@ def logout(request):
 def user_dashboard(request):
     # Retrieve questions associated with the current user
     user_questions = Question.objects.filter(user=request.user)
-    return render(request, 'accounts/dashboard.html', {'user_questions': user_questions})
+    # Get the count of unread notifications for the current user
+    unread_notifications_count = Notification.objects.unread().filter(recipient=request.user).count()
+
+    context = {
+        'user_questions': user_questions,
+        'unread_notifications_count': unread_notifications_count,
+    }
+
+    return render(request, 'accounts/dashboard.html', context)
 
 @login_required
 def update_question(request, question_id):

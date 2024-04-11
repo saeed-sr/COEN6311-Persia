@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -7,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background: #f7f7f7;
@@ -92,6 +94,18 @@
 </head>
 <body>
 
+
+
+<!-- Notification Button -->
+<div class="notification-button">
+    <a href="{% url 'notifications:all' %}" class="btn btn-warning">
+        <i class="fas fa-bell"></i>
+        {% if unread_notifications_count %}
+            <span class="badge badge-light">{{ unread_notifications_count }}</span>
+        {% endif %}
+    </a>
+</div>
+    
 <div class="container dashboard-container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
