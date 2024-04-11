@@ -17,6 +17,13 @@ urlpatterns = [
     path('agent_dashboard/bookings/activity/<int:activity_id>/', views.activity_booking_detail, name='agent_activity_booking_detail'),
     path('agent_dashboard/bookings/premade_package/<int:package_id>/', views.premade_package_booking_detail, name='agent_premade_package_booking_detail'),
 
+    path('send_notification/<int:user_id>/', views.send_notification, name='send_notification'),
+    path('fetch_notifications/', views.fetch_notifications, name='fetch_notifications'),
+    path('mark_notifications_as_read/', views.mark_notifications_as_read, name='mark_notifications_as_read'),
+
+
+
+
 
 
     ]

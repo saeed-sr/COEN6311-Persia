@@ -1,0 +1,28 @@
+{% for notification in notifications %}
+  <div class="notification-item mb-3 p-2 bg-white rounded shadow-sm">
+    <p class="mb-1"><strong>From:</strong> {{ notification.actor }}</p>
+    <p class="mb-1"><strong>Message:</strong> {{ notification.description }}</p>
+    <p class="mb-1 text-muted"><small><strong>Time:</strong> {{ notification.timestamp|timesince }} ago</small></p>
+  </div>
+{% empty %}
+  <div class="p-2 bg-white rounded shadow-sm text-muted">
+    <p>No new notifications.</p>
+  </div>
+{% endfor %}
+
+<style>
+.notification-item {
+  border-left: 4px solid #007bff; /* A blue accent on the left */
+  background-color: #f8f9fa; /* Light grey background */
+  border-radius: .25rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1); /* Slight shadow for depth */
+}
+
+.notification-item p {
+  margin-bottom: .25rem; /* Reduced space between paragraphs */
+}
+
+.notification-item p:last-child {
+  margin-bottom: 0; /* Remove margin at the bottom of the last paragraph */
+}
+</style>

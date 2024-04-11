@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render , redirect, get_object_or_404
 from django.contrib.auth.models import User, auth, Group
 from django.contrib import messages
@@ -13,6 +14,8 @@ from booking.models import Booking
 from django.db.models import Q
 from django.utils.timezone import now
 from notifications.models import Notification
+from notifications.signals import notify
+
 
 
 # from django.contrib.auth import update_password
@@ -285,6 +288,8 @@ def flight_booking_detail(request, flight_id):
         'first_name': booking.user.first_name,
         'last_name': booking.user.last_name,
         'email': booking.user.email,
+        'user_id': booking.user.id,  # Make sure to include this line
+
     } for booking in bookings]
 
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
@@ -303,6 +308,8 @@ def hotel_booking_detail(request, hotel_id):
         'first_name': booking.user.first_name,
         'last_name': booking.user.last_name,
         'email': booking.user.email,
+        'user_id': booking.user.id,  # Make sure to include this line
+
     } for booking in bookings]
 
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
@@ -320,6 +327,8 @@ def activity_booking_detail(request, activity_id):
         'first_name': booking.user.first_name,
         'last_name': booking.user.last_name,
         'email': booking.user.email,
+        'user_id': booking.user.id,  # Make sure to include this line
+
     } for booking in bookings]
 
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
@@ -348,9 +357,40 @@ def premade_package_booking_detail(request, package_id):
         'first_name': booking.user.first_name,
         'last_name': booking.user.last_name,
         'email': booking.user.email,
+        'user_id': booking.user.id,  # Make sure to include this line
+
     } for booking in bookings]
 
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
+
+
+@login_required
+@user_passes_test(is_agent)
+def send_notification(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, pk=user_id)
+        message = request.POST.get('message', 'Default notification message.')
+
+        # Send the notification
+        notify.send(request.user, recipient=user, verb='Notification', description=message)
+
+        messages.success(request, f'Notification sent to {user.username}.')
+        return redirect('agent_dashboard')  # Adjust as necessary
+    else:
+        messages.error(request, 'You can only send notifications with a POST request.')
+        return redirect('agent_dashboard')  # Adjust as necessary
+    
+
+@login_required
+def fetch_notifications(request):
+    notifications = request.user.notifications.unread()
+    return render(request, 'accounts/_notifications.html', {'notifications': notifications})
+
+@login_required
+def mark_notifications_as_read(request):
+    request.user.notifications.mark_all_as_read()
+    return JsonResponse({'status': 'success'})
+
 
 
 @login_required

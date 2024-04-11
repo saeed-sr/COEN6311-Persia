@@ -7,14 +7,33 @@
 {% block content %}
 
 <!-- Notification Button -->
-<div class="notification-button">
-    <a href="{% url 'notifications:all' %}" class="btn btn-warning">
-        <i class="fas fa-bell"></i>
-        {% if unread_notifications_count %}
-            <span class="badge badge-light">{{ unread_notifications_count }}</span>
-        {% endif %}
-    </a>
-</div>
+<!-- Trigger modal button -->
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#notificationsModal">
+    <i class="fas fa-bell"></i>
+    {% if unread_notifications_count %}
+        <span class="badge badge-light">{{ unread_notifications_count }}</span>
+    {% endif %}
+</button>
+
+<!-- Notifications Modal -->
+<div class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Notifications will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
     
 <div class="container dashboard-container">
     <div class="row">
@@ -124,6 +143,29 @@
         document.getElementById("question-" + questionId + "-display").style.display = "block";
         document.getElementById("update-form-" + questionId).style.display = "none";
     }
+
+    $('#notificationsModal').on('show.bs.modal', function (event) {
+        var modal = $(this);
+        // Make an AJAX call to fetch notifications
+        $.ajax({
+          url: "{% url 'fetch_notifications' %}", // URL to the view that returns notifications
+          method: 'GET',
+          success: function(data) {
+            // Assuming 'data' contains the HTML to display notifications
+            modal.find('.modal-body').html(data);
+            
+            // Once notifications are loaded, make another call to mark them as read
+            $.ajax({
+              url: "{% url 'mark_notifications_as_read' %}", // URL to your new view for marking notifications as read
+              method: 'GET',
+              success: function(response) {
+                // If you have a badge or count of unread notifications, update it here
+                $('.notification-button .badge').text(''); // Clear the count on the badge
+              }
+            });
+          }
+        });
+      });
 </script>
 
 {% endblock %}
