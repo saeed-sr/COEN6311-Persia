@@ -97,23 +97,7 @@ def user_dashboard(request):
 
     return render(request, 'accounts/dashboard.html', context)
 
-@login_required
-def update_question(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    if request.method == 'POST':
-        updated_question_text = request.POST.get('updated_question_text')
-        question.question_text = updated_question_text
-        question.save()
-        return redirect('dashboard')  # Redirect to the dashboard after updating the question
-    else:
-        return redirect('dashboard')  # Redirect to the dashboard if the request method is not POST
 
-@login_required
-def delete_question(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    if request.method == 'POST':
-        question.delete()
-    return redirect('dashboard')
 
 @login_required
 def edit_profile(request):
@@ -367,3 +351,22 @@ def premade_package_booking_detail(request, package_id):
     } for booking in bookings]
 
     return render(request, 'accounts/booking_detail.html', {'booking_details': booking_details})
+
+
+@login_required
+def update_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == 'POST':
+        updated_question_text = request.POST.get('updated_question_text')
+        question.question_text = updated_question_text
+        question.save()
+        return redirect('dashboard')  # Redirect to the dashboard after updating the question
+    else:
+        return redirect('dashboard')  # Redirect to the dashboard if the request method is not POST
+
+@login_required
+def delete_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == 'POST':
+        question.delete()
+    return redirect('dashboard')
