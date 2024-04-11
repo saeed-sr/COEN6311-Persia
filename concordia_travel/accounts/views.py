@@ -226,6 +226,10 @@ def agent_dashboard(request):
         bookings = Booking.objects.filter(custom_package__flights=flight)
         booking_count = bookings.count()
         revenue = sum(b.custom_package.get_total_price() for b in bookings)
+        total_revenue += revenue
+        monthly_bookings = bookings.filter(date_created__month=current_month)
+        monthly_revenue += sum(booking.custom_package.get_total_price() for booking in monthly_bookings)
+
         flights_data.append({
             'flight': flight,
             'booking_count': booking_count,
@@ -237,6 +241,9 @@ def agent_dashboard(request):
         bookings = Booking.objects.filter(custom_package__hotels=hotel)
         booking_count = bookings.count()
         revenue = sum(b.custom_package.get_total_price() for b in bookings)
+        total_revenue += revenue
+        monthly_bookings = bookings.filter(date_created__month=current_month)
+
         hotels_data.append({
             'hotel': hotel,
             'booking_count': booking_count,
@@ -248,6 +255,10 @@ def agent_dashboard(request):
         bookings = Booking.objects.filter(custom_package__activities=activity)
         booking_count = bookings.count()
         revenue = sum(b.custom_package.get_total_price() for b in bookings)
+        total_revenue += revenue
+
+        total_revenue += revenue
+        monthly_bookings = bookings.filter(date_created__month=current_month)
         activities_data.append({
             'activity': activity,
             'booking_count': booking_count,
