@@ -6,6 +6,9 @@ from django.http import HttpResponse
 def index(request):
     return render(request, "homepage/index.html")
 
+def about(request):
+    return render(request, "homepage/about_us.html")
+
 def search(request):
     pass
 
