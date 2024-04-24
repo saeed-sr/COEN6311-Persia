@@ -9,3 +9,6 @@ def index(request):
 def search(request):
     pass
 
+def error_page(request):
+    pass
+

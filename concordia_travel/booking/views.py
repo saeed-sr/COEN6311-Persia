@@ -20,7 +20,7 @@ def book_custom_package(request):
 
         # Redirect to homepage or another appropriate page
         messages.success(request, 'Booking successful!')
-        return redirect('homepage')  # Adjust the URL name as needed
+        return redirect('index')  # Adjust the URL name as needed
 
     except CustomPackage.DoesNotExist:
         messages.error(request, 'Invalid custom package ID')
