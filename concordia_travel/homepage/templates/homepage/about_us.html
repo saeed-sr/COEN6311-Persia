@@ -4,93 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
-
     <style>
-        /* CSS code goes here */
+        body {
+            font-family: 'Arial', sans-serif; /* Modern font-family */
+            margin: 0;
+            padding: 0;
+            background-color: #fff; /* Light background for contrast */
+        }
+
         .about_us {
             padding: 50px 0;
             background-color: #f9f9f9;
             color: #43458b;
+            text-align: center; /* Center align text */
         }
 
-        .about_us .container {
-            position: relative;
-            z-index: 2;
+        .container {
+            max-width: 1200px; /* Restrict max width */
+            margin: 0 auto; /* Center align container */
+            padding: 0 15px; /* Padding for small screens */
         }
 
-        .about_us .section_subtitle {
-            font-size: 14px;
+        .section_subtitle {
+            font-size: 16px;
             color: #666;
             margin-bottom: 10px;
             text-transform: uppercase;
+            letter-spacing: 1.2px; /* Increased letter spacing */
         }
 
-        .about_us .section_title h2 {
+        .section_title h2 {
             font-size: 42px;
             color: #333;
             margin-bottom: 30px;
+            transition: color 0.3s ease; /* Smooth transition for hover effects */
         }
 
         .about_us p {
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: 18px;
+            line-height: 1.8;
             color: #666;
             margin-bottom: 20px;
         }
-         /* Style for team member boxes */
+
         .team_member_box {
-            background-color: #f0f0f0; /* Background color for member boxes */
-            border: 1px solid #ccc; /* Add border */
-            padding: 20px; /* Add padding inside the box */
-            margin-bottom: 20px; /* Add margin at the bottom of each box */
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px; /* Rounded corners */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
         }
 
-        /* Style for team member names */
-        .team_member_name {
-            font-weight: bold; /* Make the team member names bold */
-            margin-bottom: 10px; /* Add margin at the bottom of each name */
+        .team_member_box:hover {
+            transform: translateY(-5px); /* Raise the box on hover */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Add shadow on hover */
         }
-        /* Style for team member explanations */
+
+        .team_member_name {
+            font-weight: bold;
+            margin-bottom: 5px; /* Reduced margin */
+            display: block; /* Makes it block to break line automatically */
+            color: #43458b; /* Color consistency */
+        }
+
         .team_member_explanation {
-            font-size: 14px; /* Set font size for explanations */
+            font-size: 16px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <!-- Your HTML content goes here -->
-    <!-- About Us -->
     <div class="about_us">
         <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <div class="section_subtitle">Learn more about us</div>
-                    <div class="section_title"><h2>About Us</h2></div>
-                </div>
+            <div class="section_subtitle">Learn more about us</div>
+            <div class="section_title"><h2>About Us</h2></div>
+            <p>Welcome to Concordia Travel, your premier destination for unforgettable travel experiences. Our dedicated team consists of seasoned professionals, each passionate about crafting personalized journeys tailored to your unique preferences.</p>
+            <p>At Concordia Travel, we take pride in our commitment to excellence and unparalleled customer service. Whether you're seeking a luxurious getaway, a cultural immersion, or an adrenaline-fueled adventure, our travel agents are dedicated to making your dream vacation a reality.</p>
+            <p>Contact us today to embark on your next extraordinary journey with Concordia Travel.</p>
+            <p>Meet our team:</p>
+            <div class="team_member_box" style="background-color: #a4d9a4;">
+                <span class="team_member_name">Sepehr: ------>  Email address: Sepehr@concordiatravel.ca</span>
+                <p class="team_member_explanation">With a keen eye for detail and a wealth of travel knowledge, Sepehr ensures that every aspect of your itinerary exceeds expectations.</p>
             </div>
-            <div class="row">
-                <div class="col-lg-8 offset-lg-2 text-center">
-                    <p>Welcome to Concordia Travel, your premier destination for unforgettable travel experiences. Our dedicated team consists of seasoned professionals, each passionate about crafting personalized journeys tailored to your unique preferences.</p>
-                    <p>At Concordia Travel, we take pride in our commitment to excellence and unparalleled customer service. Whether you're seeking a luxurious getaway, a cultural immersion, or an adrenaline-fueled adventure, our travel agents are dedicated to making your dream vacation a reality.</p>
-                    <p>Contact us today to embark on your next extraordinary journey with Concordia Travel.</p>
-                    <!-- Team members with explanations in colorful boxes -->
-                    <p>Meet our team:</p>
-                    <div class="team_member_box" style="background-color: #a4d9a4;">
-                        <span class="team_member_name">Sepehr: ------>  Email address: Sepehr@concordiatravel.ca</span>
-                        <p class="team_member_explanation">With a keen eye for detail and a wealth of travel knowledge, Sepehr ensures that every aspect of your itinerary exceeds expectations.
-</p>
-                    </div>
-                    <div class="team_member_box" style="background-color: lightpink;">
-                        <span class="team_member_name">Marzieh: ------>  Email address: mari@concordiatravel.ca</span>
-                        <p class="team_member_explanation">As a seasoned traveler herself, Marzieh understands the importance of seamless logistics and impeccable service, guaranteeing a stress-free experience from start to finish.</p>
-                    </div>
-                    <div class="team_member_box" style="background-color: #add8e6;">
-                        <span class="team_member_name">Saeed: ------>  Email address: saeed@concordiatravel.ca</span>
-                        <p class="team_member_explanation">Saeed has a talent for uncovering hidden gems and creating unforgettable adventures. His curated trips promise to leave you captivated and inspired.</p>
-                    </div>
-                    <div class="team_member_box" style="background-color: #eaad95;">
-                        <span class="team_member_name">Mahyar: ------>  Email address: mahyar@concordiatravel.ca</span>
-                        <p class="team_member_explanation">A master at creating unforgettable memories, Mahyar specializes in crafting custom-made travel experiences that perfectly align with your dreams and desires.</p>
-                    </div>
+            <div class="team_member_box" style="background-color: lightpink;">
+                <span class="team_member_name">Marzieh: ------>  Email address: mari@concordiatravel.ca</span>
+                <p class="team_member_explanation">As a seasoned traveler herself, Marzieh understands the importance of seamless logistics and impeccable service, guaranteeing a stress-free experience from start to finish.</p>
+            </div>
+            <div class="team_member_box" style="background-color: #add8e6;">
+                <span class="team_member_name">Saeed: ------>  Email address: saeed@concordiatravel.ca</span>
+                <p class="team_member_explanation">Saeed has a talent for uncovering hidden gems and creating unforgettable adventures. His curated trips promise to leave you captivated and inspired.</p>
+            </div>
+            <div class="team_member_box" style="background-color: #eaad95;">
+                <span class="team_member_name">Mahyar: ------>  Email address: mahyar@concordiatravel.ca</span>
+                <p class="team_member_explanation">A master at creating unforgettable memories, Mahyar specializes in crafting custom-made travel experiences that perfectly align with your dreams and desires.</p>
             </div>
         </div>
     </div>
