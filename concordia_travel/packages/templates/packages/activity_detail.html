@@ -7,12 +7,19 @@ Activity Details
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">{{ activity.name }} Details</h1>
+
+    {%if activity.agency%}
+        <p><strong>Agency:</strong> {{ activity.agency }}</p>
+    {%endif%}
     <p><strong>Location:</strong> {{ activity.location }}</p>
     <p><strong>Type:</strong> {{ activity.type }}</p>
     <p><strong>Start Time:</strong> {{ activity.start_time }}</p>
     <p><strong>Duration:</strong> {{ activity.duration }}</p>
     <p><strong>Price:</strong> ${{ activity.price }}</p>
-    <p>{{ activity.description }}</p>
+
+    {%if activity.description%}
+        <p>{{ activity.description }}</p>
+    {%endif%}
     
     <!-- Booking Button -->
     <form action="{% url 'book_activity' activity.pk %}" method="post">

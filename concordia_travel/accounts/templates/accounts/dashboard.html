@@ -1,97 +1,40 @@
+
+{% extends 'accounts/base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
-    <style>
-        body {
-            background: #f7f7f7;
-            font-family: 'Nunito', sans-serif;
-        }
-        .dashboard-container {
-            margin-top: 50px;
-        }
-        .card {
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            transition: 0.3s;
-            border-radius: 5px;
-            margin-bottom: 20px; /* Added margin for spacing between cards */
-        }
-        .card:hover {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-        }
-        .card-body {
-            padding: 2rem;
-        }
-        .card-title {
-            font-size: 1.5rem;
-        }
-        .card-text {
-            font-size: 1rem;
-            color: #555;
-        }
-        /* Styling for answered questions */
-        .answered {
-            background-color: #d1e7dd; /* Pale green */
-        }
-        /* Styling for unanswered questions */
-        .unanswered {
-            background-color: #f8d7da; /* Pale red */
-        }
-        /* Indentation for the answer box */
-        .answer-box {
-            margin-left: 20px;
-            padding: 10px;
-            background-color: #f3f4f6;
-            border-radius: 5px;
-        }
-        /* Styling for the answer text */
-        .answer-text {
-            color: #333;
-        }
-        /* New style for delete button */
-        .delete-button {
-            background-color: #dc3545; /* Red background */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .delete-button:hover {
-            background-color: #c82333; /* Darker red on hover */
-        }
-        .update-button {
-            background-color: green; /* green background */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
+{% block title %}Dashboard{% endblock %}
 
-        .update-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
+{% block content %}
 
-        /* Style for the question input field */
-        .question-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
+<!-- Notification Button -->
+<!-- Trigger modal button -->
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#notificationsModal">
+    <i class="fas fa-bell"></i>
+    {% if unread_notifications_count %}
+        <span class="badge badge-light">{{ unread_notifications_count }}</span>
+    {% endif %}
+</button>
 
+<!-- Notifications Modal -->
+<div class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Notifications will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
 <div class="container dashboard-container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -105,6 +48,14 @@
                     <!-- More user details here -->
                     <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
                     <a href="{% url 'view_bookings' %}" class="btn btn-secondary">View Bookings</a>
+
+                    <!-- Button visible only to agents -->
+                    {% for group in user.groups.all %}
+                    {% if group.name == "agents" %}
+                        <a href="{% url 'agent_dashboard' %}" class="btn btn-info">Agent Dashboard</a>
+                    {% endif %}
+                    {% endfor %}
+
                 </div>
             </div>
 
@@ -166,6 +117,10 @@
     </div>
 </div>
 
+{% endblock %}
+
+
+{% block custom_scripts %}
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
@@ -188,6 +143,29 @@
         document.getElementById("question-" + questionId + "-display").style.display = "block";
         document.getElementById("update-form-" + questionId).style.display = "none";
     }
+
+    $('#notificationsModal').on('show.bs.modal', function (event) {
+        var modal = $(this);
+        // Make an AJAX call to fetch notifications
+        $.ajax({
+          url: "{% url 'fetch_notifications' %}", // URL to the view that returns notifications
+          method: 'GET',
+          success: function(data) {
+            // Assuming 'data' contains the HTML to display notifications
+            modal.find('.modal-body').html(data);
+            
+            // Once notifications are loaded, make another call to mark them as read
+            $.ajax({
+              url: "{% url 'mark_notifications_as_read' %}", // URL to your new view for marking notifications as read
+              method: 'GET',
+              success: function(response) {
+                // If you have a badge or count of unread notifications, update it here
+                $('.notification-button .badge').text(''); // Clear the count on the badge
+              }
+            });
+          }
+        });
+      });
 </script>
-</body>
-</html>
+
+{% endblock %}

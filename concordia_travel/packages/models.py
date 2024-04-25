@@ -10,7 +10,8 @@ class Flight(models.Model):
     departure_time = models.DateTimeField()
     duration = models.DurationField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    description = models.TextField(blank=True, null=True)
+    agency = models.ForeignKey(User, related_name='flights_agent', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.airline} - {self.flight_number} ({self.departure_city} to {self.arrival_city})"
@@ -19,10 +20,12 @@ class Flight(models.Model):
 
 class Hotel(models.Model):
     name = models.CharField(max_length=100)
-    city = models.TextField(max_length=100)
+    city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    agency = models.ForeignKey(User, related_name='hotels_agent', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} in {self.city}"
@@ -37,6 +40,8 @@ class Activity(models.Model):
     duration = models.DurationField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)  # Allows for an optional description
+    agency = models.ForeignKey(User, related_name='activitys_agent', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} - {self.location}"
@@ -78,6 +83,8 @@ class CustomPackage(models.Model):
         total_price += sum(hotel.price for hotel in self.hotels.all())
         total_price += sum(activity.price for activity in self.activities.all())
         return total_price
+    
+
     
 
 class AgentManager(models.Manager):

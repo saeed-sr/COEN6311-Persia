@@ -1,0 +1,91 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Booking Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Booking Details</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in booking_details %}
+            <tr>
+                <td>{{ detail.username }}</td>
+                <td>{{ detail.first_name }}</td>
+                <td>{{ detail.last_name }}</td>
+                <td>{{ detail.email }}</td>
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#notificationModal" data-userid="{{ detail.user_id }}" data-username="{{ detail.username }}">
+                        Send Notification
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Notification Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="notificationModalLabel">Send Notification</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="user_id" id="modalUserId">
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <textarea class="form-control" name="message" id="message-text"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Send Notification</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+{% endblock %}
+
+
+{% block custom_scripts %}
+<script>
+    $('#notificationModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var userId = button.data('userid'); // Extract user ID from data-* attributes
+        var username = button.data('username'); // Extract username from data-* attributes
+
+        // Update the modal's content.
+        var modal = $(this);
+        modal.find('.modal-title').text('Send Notification to ' + username);
+
+        // Ensure that userId is valid before updating the form action
+        if (userId) {
+            var newAction = "{% url 'send_notification' 999999999 %}".replace('999999999', userId);
+            modal.find('form').attr('action', newAction);
+        } else {
+            console.error('Invalid userId:', userId);
+            // Optionally hide the modal if there's no valid userId
+            modal.modal('hide');
+        }
+    });
+</script>
+
+{% endblock %}

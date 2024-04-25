@@ -8,8 +8,8 @@ from datetime import datetime
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Flight, Hotel, Activity, CustomPackage, PreMadePackage,Question
-from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm
-from django.contrib.auth.decorators import login_required
+from .forms import FlightForm, HotelForm, ActivityForm, CustomPackageForm, PreMadePackageForm
+from django.contrib.auth.decorators import login_required ,user_passes_test
 
 from django_tables2.views import SingleTableView
 from .tables import FlightTable, HotelTable, ActivityTable
@@ -339,5 +339,75 @@ def ask_question(request, package_id):
         form = QuestionForm()
     return render(request, 'packages/premade_package.html', {'form': form, 'package': package})
 
+
+def is_agent(user):
+    return user.groups.filter(name='agents').exists()
+
+@login_required
+@user_passes_test(is_agent)
 def add_flight(request):
-    pass
+    if request.method == 'POST':
+        form = FlightForm(request.POST)
+        
+        if form.is_valid():
+
+            flight = form.save(commit=False)
+            flight.agency = request.user
+            flight.save()
+
+            messages.success(request, 'Flight added successfully!')
+            return redirect('agent_dashboard')  # Redirect to the agent dashboard or the appropriate URL
+    else:
+        form = FlightForm()
+
+    return render(request, 'packages/add_flight.html', {'form': form})
+
+
+@login_required
+@user_passes_test(is_agent)
+def add_hotel(request):
+    if request.method == 'POST':
+        form = HotelForm(request.POST)
+        if form.is_valid():
+            hotel = form.save(commit=False)
+            hotel.agency = request.user
+            hotel.save()
+            messages.success(request, 'Hotel added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = HotelForm()
+    return render(request, 'packages/add_hotel.html', {'form': form})
+
+
+@login_required
+@user_passes_test(is_agent)
+def add_activity(request):
+    if request.method == 'POST':
+        form = ActivityForm(request.POST)
+        if form.is_valid():
+            hotel = form.save(commit=False)
+            hotel.agency = request.user
+            hotel.save()
+            messages.success(request, 'Activity added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = ActivityForm()
+    return render(request, 'packages/add_activity.html', {'form': form}) 
+
+
+
+@login_required
+@user_passes_test(is_agent)
+def add_premade_package(request):
+    if request.method == 'POST':
+        form = PreMadePackageForm(request.POST, user=request.user)  # Pass the user to the form
+        if form.is_valid():
+            premade_package = form.save(commit=False)
+            premade_package.agency = request.user
+            premade_package.save()
+            form.save_m2m()  # This is necessary for saving ManyToMany relationships
+            messages.success(request, 'Premade Package added successfully!')
+            return redirect('agent_dashboard')
+    else:
+        form = PreMadePackageForm(user=request.user)  # Pass the user to the form
+    return render(request, 'packages/add_premade_package.html', {'form': form})
